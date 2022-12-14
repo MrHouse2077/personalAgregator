@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\IndexController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +15,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::prefix('v1')->group(function () {
+
+    Route::post('/login', [IndexController::class, 'indexAction']);
+    Route::post('/chekToken', [IndexController::class, 'checkToken']);
+    Route::get('/get-users', function(){
+        return User::get();
+    });
+
+    Route::get('/logout', function () {    
+    });
+
+    Route::middleware([TokenAuth::class])->post('/lk', function () {
+        return "скрытая зона";
+    });
+
 });

@@ -1,5 +1,6 @@
+
 .Login{
-    background-color: #000;
+    background-color: #8cbded;
     height: 100vh;
     width: 100vw;
     display: flex;
@@ -14,30 +15,24 @@
         padding: 5rem 3rem;
         max-height: 40rem;
     }
-    .image{
-        width: 100%;
-        position: relative;
-    }
-    .image img{
-        display: block;
-        width: 100%;
-        height: auto;
-    }
 
     .field{
         display: block;
-        background-color: #ea1b29;
+        background-color: #f5f5f5;
         padding: 0.5rem;
         font-size: 2rem;
-        color: #fff;
+        margin-left: 1rem;
+        color: rgb(15, 128, 226);
         box-sizing: border-box;
-        border: 1px solid #1f1f1f;
+        border-radius: 20%;
+        border: 1px solid #000000;
         cursor: pointer;
     }
     .error{
         border: .3rem solid #ea1b29;
         font-size: 2rem;
         width: 100%;
+        color:#ea1b29
     }
     .form_input:focus,
     .error:focus,
@@ -53,9 +48,9 @@
     }
 
     .succes{
-        border: 1px solid #ccc;
-        background-color: #1f1f1f;
-        color: #ccc;
+        border: 1px solid rgb(35, 160, 69);
+        background-color: #ffffff;
+        color: rgb(35, 160, 69);
         font-size: 2rem;
         width: 100%;
     }
@@ -64,12 +59,12 @@
         outline: none;
         width: 100%;
         z-index: 3;
-        top: -20rem;
     }
     .form_input,
     .error{
-        background-color: #ccc;
-        border: .3rem solid #ccc;
+        background-color: rgb(249, 249, 249);
+        border: .21rem solid rgb(210, 28, 28);
+        color:#000000;
     }
 
     .form_input,
@@ -79,10 +74,25 @@
         font-size: 2rem;
         margin-bottom: 3rem;
         position: relative;
-        border-radius: 1rem 0 1rem 0;
+        border-radius: 1rem;
     }
 
-   
+    .exitBack{
+        display: block;
+        background-color: #f5f5f5;
+        padding: 0.5rem;
+        font-size: 2rem;
+        position: absolute;
+        left: 0;
+        box-sizing: border-box;
+        border-radius: 20%;
+        border: 1px solid #000000;
+        cursor: pointer;
+    }
+    .NavText{
+        text-decoration: none;
+        color: rgb(15, 128, 226);
+    }
     .buttonfield{
         display: flex;
         flex-wrap: wrap;
@@ -91,12 +101,14 @@
 
     .openAccess{
         display: block;
-        background-color: #1f1f1f;
+        background-color: rgb(15, 128, 226);
         padding: 0.5rem;
         font-size: 2rem;
-        color: #ccc;
+        color: #F5F5F5;
+        margin-left: 1rem;
+        border-radius: 20%;
         box-sizing: border-box;
-        border: 2px solid #ccc;
+        border: 2px solid rgb(0, 0, 0);
         cursor: pointer;
     }
 

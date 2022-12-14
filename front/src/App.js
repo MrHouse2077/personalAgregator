@@ -23,13 +23,14 @@ function App() {
   const navigate = useNavigate();
 
   let stateApp = StateApp;
-  let [dataApp, setAuth] = useState(stateApp );
+  let [dataApp, setAuth] = useState(stateApp);
   	
   function setAuthData(data){
     let copy = Object.assign([], dataApp);
     	
     copy.auth.token = data.data.token;
     copy.auth.email = data.data.email;
+    copy.auth.login = data.data.login;
     copy.auth.name = data.data.name;
 
     localStorage.setItem('token', data.data.token);
@@ -38,18 +39,20 @@ function App() {
 
     
 
-    navigate('/admin/dashboard');
+    navigate('/', {authData: dataApp});
   }
   return (
     <div className="App">
       <Routes>
-        <Route path="/" element={<Home startImage={Home} />} />
+        <Route path="/" element={<Home 
+          authData={dataApp.auth}/>} />
         <Route path="/about" />
-        <Route path="/login" element={<Login startImage={Login}/>} />
+        <Route path="/login" element={<Login
+          auth={dataApp.auth}
+          setAuthData={setAuthData}
+        />}  />
         <Route path="/admin/dashboard"/>
 
-        <Route path="/shop" />
-        <Route path="/contacts"/>
 
         
         {/* <Route path="login" element={<Login

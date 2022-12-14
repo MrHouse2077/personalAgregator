@@ -11,6 +11,7 @@ import InputBase from '@mui/material/InputBase';
 import Badge from '@mui/material/Badge';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
+import { NavLink } from 'react-router-dom';
 import Styles from './Header.module.scss';
 
 const Search = styled('div')(({ theme }) => ({
@@ -53,7 +54,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function PrimarySearchAppBar() {
+export default function PrimarySearchAppBar(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
@@ -95,12 +96,31 @@ export default function PrimarySearchAppBar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-      <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
+      {console.log(props)}
+      {(props.authData.login==null)? 
+   
+        <NavLink to="/login" className={Styles.link}>
+          <MenuItem onClick={handleMenuClose}>
+            Login 
+          </MenuItem>
+        </NavLink>
+      :
+      <div>
+        <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+        <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+        <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
+      </div>}
+      
     </Menu>
   );
+{/* <NavLink
+                                to="/login"
 
+                                className='loginBtn'
+
+                            >
+                                Login1
+                            </NavLink> */}
   const mobileMenuId = 'primary-search-account-menu-mobile';
   const renderMobileMenu = (
     <Menu
