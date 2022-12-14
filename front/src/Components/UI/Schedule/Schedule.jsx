@@ -14,12 +14,12 @@ function Schedule() {
               <View
                 type="day"
                 startDayHour={7}
-                endDayHour={22}
+                endDayHour={23}
             />
             <View
                 type="week"
                 startDayHour={7}
-                endDayHour={22}
+                endDayHour={23}
             />
           </Scheduler>
 

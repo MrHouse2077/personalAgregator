@@ -1,23 +1,23 @@
 import React, { useState, useEffect } from 'react';
 
 import  Schedule from '../../UI/Schedule/Schedule';
-
+import  MainLayout from '../../layouts/MainLayout/MainLayout';
 import Styles from './Home.module.scss';
 
 function Home() {
     return (
-      <div className="Home">
+      <div >
   
-        {/* <MainLayout>
+        <MainLayout>
   
-         <SliderText />
+        <Schedule />
   
-        </MainLayout> */}
+        </MainLayout>
   
-        <section className={Styles.Scheduler}>
-          <Schedule />
+        {/* <section className={Styles.Scheduler}>
+          
          
-        </section>
+        </section> */}
       </div>
     );
   }
