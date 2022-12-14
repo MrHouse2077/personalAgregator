@@ -73,11 +73,13 @@ export default function PrimarySearchAppBar(props) {
     setAnchorEl(null);
     handleMobileMenuClose();
   };
-
+  
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
-
+  function loggingOut(){
+      props.logout();
+  }
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
     <Menu
@@ -96,7 +98,6 @@ export default function PrimarySearchAppBar(props) {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      {console.log(props)}
       {(props.authData.login==null)? 
    
         <NavLink to="/login" className={Styles.link}>
@@ -108,7 +109,7 @@ export default function PrimarySearchAppBar(props) {
       <div>
         <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
         <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-        <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
+        <MenuItem onClick={function(evt){handleMenuClose(); loggingOut()}} >Logout</MenuItem>
       </div>}
       
     </Menu>

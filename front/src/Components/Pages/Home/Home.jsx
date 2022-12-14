@@ -8,7 +8,7 @@ function Home(props) {
     return (
       <div >
   
-        <MainLayout  authData={props.authData}>
+        <MainLayout  authData={props.authData} logout={props.logout}>
        
         <Schedule />
   

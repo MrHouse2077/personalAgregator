@@ -18,7 +18,14 @@ import Login from './Components/Pages/Login/Login';
 // import Search from './Components/Search/Search';
 // import Product from './Components/Pages/Shop/Pages/Product/Product';
 
-
+let def =  {
+  auth: 
+      {
+          login: null,
+          email: null,
+          token: null 
+      }
+}
 function App() {
   const navigate = useNavigate();
 
@@ -41,15 +48,21 @@ function App() {
 
     navigate('/', {authData: dataApp});
   }
+  function logout(){
+    setAuth(def);
+    navigate('/', {authData: dataApp});
+  }
   return (
     <div className="App">
       <Routes>
         <Route path="/" element={<Home 
-          authData={dataApp.auth}/>} />
+          authData={dataApp.auth}
+          logout={logout}/>} />
         <Route path="/about" />
         <Route path="/login" element={<Login
           auth={dataApp.auth}
           setAuthData={setAuthData}
+
         />}  />
         <Route path="/admin/dashboard"/>
 

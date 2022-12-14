@@ -7,7 +7,7 @@ import Styles from './MainLayout.module.scss';
 function MainLayout(props) {
     return (
       <div>
-        <Header authData={props.authData}/>
+        <Header authData={props.authData} logout={props.logout}/>
         <section className={Styles.content}>
           {props.children}
          

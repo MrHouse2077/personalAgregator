@@ -5,26 +5,34 @@ import 'devextreme/dist/css/dx.light.css';
 import { Scheduler, View } from 'devextreme-react/scheduler';
 
 import Styles from './Schedule.module.scss';
+    function createEvent(evt){
+      console.log(evt.target);
+    }
+  function Schedule() {
+      return (
+        <div className={Styles.Schedule}>
+            <Scheduler 
+              className="schedule" 
+              id="scheduler"
+              onAppointmentAdded={createEvent}
+            >        
+                
+                
+                
+                <View
+                  type="day"
+                  startDayHour={7}
+                  endDayHour={23}
+                />
+                <View
+                  type="week"
+                  startDayHour={7}
+                  endDayHour={23}
+                />
+            </Scheduler>
 
-function Schedule() {
-    return (
-      <div className={Styles.Schedule}>
-          <Scheduler className="schedule" id="scheduler">
-              {/* {Configuration goes here} */}
-              <View
-                type="day"
-                startDayHour={7}
-                endDayHour={23}
-            />
-            <View
-                type="week"
-                startDayHour={7}
-                endDayHour={23}
-            />
-          </Scheduler>
-
-      </div>
-    );
-  }
+        </div>
+      );
+   }
   
   export default Schedule;
