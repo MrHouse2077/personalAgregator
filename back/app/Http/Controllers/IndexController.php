@@ -65,11 +65,14 @@ class IndexController extends Controller
         FeedbackJob::dispatch($request->name, $request->email, $request->msg);
 
         return ['flag' => 1, 'msg' => 'success!'];
-        
-
-        
-      
     }
     
-    
+    function findUserAction(Request $request){
+        dd($request->login);
+        $user = User::where('login', $request->login)->first();
+        if($user==NULL){
+            return RequestHelper::write(404, 'Пользователь не найден!', NULL);
+        }
+        $data = Event::where('user_id', $user->id);
+    }
 }

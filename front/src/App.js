@@ -5,18 +5,12 @@ import './App.scss';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import StateApp from './State';
-import { NavLink } from 'react-router-dom';
 // import StateApp from './State';
 import Home from './Components/Pages/Home/Home';
 import Login from './Components/Pages/Login/Login';
-// import About from './Components/Pages/About/About';
-// import Contacts from './Components/Pages/Contacts/Contacts';
-
-// import Login from './Components/Pages/Login/Login';
+import AccountLayout from './Components/layouts/AccountLayout/AccountLayout';
 // import Dashboard from './Components/Admin/Pages/Dashboard/Dashboard';
-// import ListProducts from './Components/Pages/Shop/Pages/ListProducts/ListProducts';
 // import Search from './Components/Search/Search';
-// import Product from './Components/Pages/Shop/Pages/Product/Product';
 
 let def =  {
   auth: 
@@ -64,8 +58,7 @@ function App() {
           setAuthData={setAuthData}
 
         />}  />
-        <Route path="/admin/dashboard"/>
-
+        <Route path="/user/:log/ProfilePage" element={<AccountLayout auth={dataApp.auth}/>}/>
 
         
         {/* <Route path="login" element={<Login

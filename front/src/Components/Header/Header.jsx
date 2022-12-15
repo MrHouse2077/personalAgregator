@@ -11,8 +11,10 @@ import InputBase from '@mui/material/InputBase';
 import Badge from '@mui/material/Badge';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
-import { NavLink } from 'react-router-dom';
+import Requests from "../Requests";
+import { NavLink, useNavigate } from 'react-router-dom';
 import Styles from './Header.module.scss';
+
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -55,6 +57,17 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function PrimarySearchAppBar(props) {
+  function sendSearch(log){
+    Requests(
+      {
+          method:'post', 
+          url: "/getSearchResult",
+          data: {login: log},
+          callback: props.setAuthData
+      }
+    )
+  }
+  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
@@ -79,6 +92,13 @@ export default function PrimarySearchAppBar(props) {
   };
   function loggingOut(){
       props.logout();
+  }
+  function searchStart(evt){
+    if (evt.key=="Enter"){
+      let log = evt.target.value;
+      sendSearch(log);
+      navigate("/user/" + log +"/ProfilePage");
+    }
   }
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
@@ -107,8 +127,9 @@ export default function PrimarySearchAppBar(props) {
         </NavLink>
       :
       <div>
-        <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-        <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+        <NavLink to="/user:login/ProfilePage" className={Styles.link}>
+          <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+        </NavLink> 
         <MenuItem onClick={function(evt){handleMenuClose(); loggingOut()}} >Logout</MenuItem>
       </div>}
       
@@ -187,7 +208,7 @@ export default function PrimarySearchAppBar(props) {
           >
             PA
           </Typography>
-          <Search>
+          <Search onKeyDown={function(evt){searchStart(evt)}}>
             <SearchIconWrapper>
                 <FontAwesomeIcon icon={solid('magnifying-glass')} />
             </SearchIconWrapper>

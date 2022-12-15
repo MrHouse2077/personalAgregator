@@ -15,15 +15,15 @@ class PrivacySeeder extends Seeder
      */
     public function run()
     {
-        DB::table('privacies')->insert([
+        DB::table('privacies')->insertOrIgnore([
             'id' => 1,
             'name' => 'свободный доступ',
         ]);
-        DB::table('privacies')->insert([
+        DB::table('privacies')->insertOrIgnore([
             'id' => 2,
             'name' => 'частичный доступ',
         ]);
-        DB::table('privacies')->insert([
+        DB::table('privacies')->insertOrIgnore([
             'id' => 3,
             'name' => 'закрытый доступ',
         ]);
