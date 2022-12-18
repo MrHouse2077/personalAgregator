@@ -9,6 +9,7 @@ use App\Http\Validators\LoginValidator;
 use Illuminate\Validation\ValidationException;
 
 use App\Models\User;
+use App\Models\Event;
 
 use Illuminate\Support\Facades\Hash;
 
@@ -68,11 +69,57 @@ class IndexController extends Controller
     }
     
     function findUserAction(Request $request){
-        dd($request->login);
         $user = User::where('login', $request->login)->first();
         if($user==NULL){
             return RequestHelper::write(404, 'Пользователь не найден!', NULL);
         }
-        $data = Event::where('user_id', $user->id);
+        
+       
+        $foundUser = User::find($user->id);
+        $events = $foundUser->events;
+        $filtered = [];
+        $i=1;
+        foreach ($events as $event){
+            if($event->privacy_type_id != 3){
+                $openEvent = array($i=>$event);
+                $i = $i + 1;
+                array_push($filtered, $openEvent);
+            };
+        }
+        $data = [
+            'events' => $filtered,
+            'login' => $request->login,
+        ];
+        return RequestHelper::write(201, 'Пользователь найден успешно!', $data);
+    }
+
+    function registerUserAction(Request $request){
+
+        $givenuser = User::where('email', $request->email)->first();
+            if($givenuser!= null){
+                return RequestHelper::write(409, 'По данному адресу уже существует аккаунт', null);
+            }
+        $givenuser = User::where('login', $request->login)->first();
+            if($givenuser!= null){
+                return RequestHelper::write(409, 'Данный логин занят, попробуйте другой', null);
+            }
+        
+    
+        $user = new User;
+
+        $user->name = $request->name;
+        $user->login = $request->login;
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password);
+        $user->privacy = 1;
+        $user->role = 2;
+        $user->save();
+        $data = [
+            "token" => $user->createToken("token_name")->plainTextToken,
+            "name" => $user->name,
+            "login" => $user->login,
+            "email" => $user->email,
+        ]; 
+        return RequestHelper::write(200, 'sucess', $data);
     }
 }

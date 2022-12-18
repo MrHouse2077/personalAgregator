@@ -11,7 +11,7 @@
 
 function Validator(params){    
 
-    let copy = Object.assign({}, params.checkValues);
+    let copy = Object.assign({}, params.checkvalues);
 
     if(copy[params.fieldElement].hasOwnProperty('value'))
         copy[params.fieldElement].value = params.event;

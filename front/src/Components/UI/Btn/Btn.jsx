@@ -1,13 +1,12 @@
 
-import Styles from "./Button.module.scss";
 
-function Button(props) {
+function Btn(props) {
     
   let onClick = props.onClick
   let className = props.className
 
     return (
-      <div className={Styles.Button}>
+      <div>
         
         <div
           className={className}
@@ -21,5 +20,5 @@ function Button(props) {
     );
   }
   
-  export default Button;
+  export default Btn;
   

@@ -3,7 +3,7 @@ import {
   NavLink,
   useParams,
 } from "react-router-dom";
-import Styles from "./AccountLayout.module.scss";
+
 import {
   MDBCol,
   MDBContainer,
@@ -32,7 +32,7 @@ export default function ProfilePage(props) {
           <MDBCol>
             <MDBBreadcrumb className="bg-light rounded-3 p-3 mb-4">
               <MDBBreadcrumbItem>
-                <NavLink to="/">
+                <NavLink to="/home">
                   <div >Home</div>
                 </NavLink>
               </MDBBreadcrumbItem>
@@ -52,9 +52,7 @@ export default function ProfilePage(props) {
                   style={{ width: '150px' }}
                   fluid />
                   <MDBRow>
-                  <MDBCol className={Styles.text}sm="3">
-                    <MDBCardText className="text-muted">{log}</MDBCardText>
-                  </MDBCol>
+                  
                   
                 </MDBRow>
               </MDBCardBody>

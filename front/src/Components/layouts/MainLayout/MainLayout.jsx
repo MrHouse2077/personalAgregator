@@ -1,14 +1,22 @@
-import React, { useState, useEffect } from 'react';
-
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import  Header from '../../Header/Header';
 
-import Styles from './MainLayout.module.scss';
 
 function MainLayout(props) {
+  const navigate = useNavigate();
+  useEffect(() => {     
+    let token = localStorage.getItem('token');
+
+    if(!token){
+        navigate('/');
+    }
+
+});
     return (
       <div>
         <Header authData={props.authData} logout={props.logout}/>
-        <section className={Styles.content}>
+        <section >
           {props.children}
          
         </section>

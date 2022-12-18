@@ -46,4 +46,8 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Privacy::class, 'privacy');
     }
+    public function events()
+    {
+        return $this->belongsToMany(Event::class);
+    }
 }

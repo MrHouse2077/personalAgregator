@@ -11,11 +11,24 @@ import InputBase from '@mui/material/InputBase';
 import Badge from '@mui/material/Badge';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
+import Modal from '../UI/Modal/Modal'
 import Requests from "../Requests";
+import {useState} from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import Styles from './Header.module.scss';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { green, purple } from '@mui/material/colors';
 
-
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: purple[500],
+    },
+    secondary: {
+      main: green[500],
+    },
+  },
+});
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
@@ -57,15 +70,41 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function PrimarySearchAppBar(props) {
+  let [alert, setAlert] = useState({
+      msg: null,
+      open: false,
+  });
+
+  function  handleClose(){
+    let copy = Object.assign([], alert);
+    copy.open = false;
+    setAlert(copy);
+  };
+  function setMsg(data) {
+    let copy = Object.assign([], alert);
+    copy.msg = data;
+    copy.open = true;
+    setAlert(copy);
+  };
+
   function sendSearch(log){
     Requests(
       {
           method:'post', 
           url: "/getSearchResult",
           data: {login: log},
-          callback: props.setAuthData
+          callback: RenderSearch,
       }
     )
+  }
+  function RenderSearch(data){
+    if(data.code==404){
+      setMsg(data.msg);
+    }
+    else{
+      navigate("/user/" + data.data.login +"/ProfilePage");
+    }
+    
   }
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -97,13 +136,12 @@ export default function PrimarySearchAppBar(props) {
     if (evt.key=="Enter"){
       let log = evt.target.value;
       sendSearch(log);
-      navigate("/user/" + log +"/ProfilePage");
     }
   }
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
+    <ThemeProvider theme={theme}>
     <Menu
-    
       anchorEl={anchorEl}
       anchorOrigin={{
         vertical: 'top',
@@ -118,84 +156,30 @@ export default function PrimarySearchAppBar(props) {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
+      <Modal alert={alert} handleClose={handleClose}/>
       {(props.authData.login==null)? 
    
-        <NavLink to="/login" className={Styles.link}>
+        <NavLink to="/" className={Styles.link}>
           <MenuItem onClick={handleMenuClose}>
             Login 
           </MenuItem>
         </NavLink>
       :
       <div>
-        <NavLink to="/user:login/ProfilePage" className={Styles.link}>
+        <NavLink to={"/user/" + props.authData.login +"/ProfilePage"} className={Styles.link}>
           <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
         </NavLink> 
         <MenuItem onClick={function(evt){handleMenuClose(); loggingOut()}} >Logout</MenuItem>
       </div>}
       
     </Menu>
+    </ThemeProvider>
   );
-{/* <NavLink
-                                to="/login"
 
-                                className='loginBtn'
-
-                            >
-                                Login1
-                            </NavLink> */}
-  const mobileMenuId = 'primary-search-account-menu-mobile';
-  const renderMobileMenu = (
-    <Menu
-      anchorEl={mobileMoreAnchorEl}
-      anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      id={mobileMenuId}
-      keepMounted
-      transformOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      open={isMobileMenuOpen}
-      onClose={handleMobileMenuClose}
-    >
-      <MenuItem >
-        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="error">
-          <FontAwesomeIcon icon={solid('envelope')} />
-          </Badge>
-        </IconButton>
-        <p>Messages</p>
-      </MenuItem>
-      <MenuItem>
-        <IconButton
-          size="large"
-          aria-label="show 17 new notifications"
-          color="inherit"
-        >
-          <Badge badgeContent={17} color="error">
-            <FontAwesomeIcon icon={solid('user')} />
-          </Badge>
-        </IconButton>
-        <p>Notifications</p>
-      </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-        <FontAwesomeIcon icon={solid('user')} />
-        </IconButton>
-        <p>Profile</p>
-      </MenuItem>
-    </Menu>
-  );
+  
 
   return (
+    <ThemeProvider theme={theme}>
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
@@ -208,6 +192,7 @@ export default function PrimarySearchAppBar(props) {
           >
             PA
           </Typography>
+
           <Search onKeyDown={function(evt){searchStart(evt)}}>
             <SearchIconWrapper>
                 <FontAwesomeIcon icon={solid('magnifying-glass')} />
@@ -219,17 +204,13 @@ export default function PrimarySearchAppBar(props) {
           </Search>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-              <Badge badgeContent={4} color="error">
-              <FontAwesomeIcon icon={solid('envelope')} />
-              </Badge>
-            </IconButton>
+
             <IconButton
               size="large"
               aria-label="show 17 new notifications"
               color="inherit"
             >
-              <Badge badgeContent={17} color="error">
+              <Badge badgeContent={0} color="error">
                 <FontAwesomeIcon icon={solid('bell')} />
               </Badge>
             </IconButton>
@@ -248,9 +229,9 @@ export default function PrimarySearchAppBar(props) {
          
         </Toolbar>
       </AppBar>
-      {renderMobileMenu}
       {renderMenu}
     </Box>
+    </ThemeProvider>
   );
 }
   
