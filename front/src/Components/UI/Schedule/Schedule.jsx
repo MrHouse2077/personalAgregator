@@ -1,38 +1,87 @@
-import React, { useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
-import { Route, Routes } from 'react-router-dom';
+import React, { useState }from 'react';
+ 
 import 'devextreme/dist/css/dx.light.css';
-import { Scheduler, View } from 'devextreme-react/scheduler';
+import Requests from "../../Requests";
+import Scheduler from 'devextreme-react/scheduler';
+import Button from 'devextreme-react/button';
 
-import Styles from './Schedule.module.scss';
-    function createEvent(evt){
-      console.log(evt.target);
+const dataFormat = [{
+  id: 0,
+  allDay: false,
+  text: null,
+  description: null,
+  startDate: new Date(),
+  recurrenceRule: null,
+  endDate: new Date(),
+}, 
+];
+ function renderEvents(data){
+  console.log(data);
+ }
+function sendEvent(eventsData, log){
+  Requests(
+    {
+        method:'post', 
+        url: "/getSearchResult",
+        data: {events: eventsData, login: log},
+        callback: renderEvents,
     }
-  function Schedule() {
-      return (
-        <div className={Styles.Schedule}>
-            <Scheduler 
-              className="schedule" 
-              id="scheduler"
-              onAppointmentAdded={createEvent}
-            >        
-                
-                
-                
-                <View
-                  type="day"
-                  startDayHour={7}
-                  endDayHour={23}
-                />
-                <View
-                  type="week"
-                  startDayHour={7}
-                  endDayHour={23}
-                />
-            </Scheduler>
+  )
+}
 
-        </div>
-      );
-   }
-  
+let current = new Date();
+let date = `${current.getFullYear()}${current.getMonth()+1}${current.getDate()}`;
+
+
+function Schedule (props){
+  const addEvent = (evt)=>{
+    let data = evt.appointmentData;
+    let copy = Object.assign([], eventData);
+    copy.allDay = data.allDay;
+    copy.text = data.text;
+    copy.description = data.description;
+    copy.startDate = data.startDate;
+    copy.recurrenceRule = data.recurrenceRule;
+    copy.endDate = data.endDate;
+    setEvent(copy);
+  }
+  const updateEvent = (evt)=>{
+    let data = evt.appointmentData;
+    // let copy = Object.assign([], eventData);
+    // copy.allDay = data.allDay;
+    // copy.text = data.text;
+    // copy.description = data.description;
+    // copy.startDate = data.startDate;
+    // copy.recurrenceRule = data.recurrenceRule;
+    // copy.endDate = data.endDate;
+    // setEvent(copy);
+    console.log(props.authData);
+  }
+  const deleteEvent = (evt)=>{
+    let data = evt.appointmentData;
+
+    // let copy = Object.assign([], eventData);
+    // copy.allDay = data.allDay;
+    // copy.text = data.text;
+    // copy.description = data.description;
+    // copy.startDate = data.startDate;
+    // copy.recurrenceRule = data.recurrenceRule;
+    // copy.endDate = data.endDate;
+    // setEvent(copy);
+    
+  }
+  let [eventData, setEvent] = useState(dataFormat);
+        return (
+            <React.Fragment>
+                <Scheduler
+                    dataSource={eventData}
+                    defaultCurrentDate={date}
+                    onAppointmentAdded={addEvent}
+                    onAppointmentUpdated={updateEvent}
+                    onAppointmentDeleted={deleteEvent}
+                />      
+            </React.Fragment>
+        )    
+}
   export default Schedule;
+  
