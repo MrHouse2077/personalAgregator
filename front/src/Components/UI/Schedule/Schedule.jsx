@@ -55,7 +55,7 @@ function Schedule (props){
     // copy.recurrenceRule = data.recurrenceRule;
     // copy.endDate = data.endDate;
     // setEvent(copy);
-    console.log(props.authData);
+    console.log(data);
   }
   const deleteEvent = (evt)=>{
     let data = evt.appointmentData;

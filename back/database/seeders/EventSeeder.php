@@ -16,8 +16,11 @@ class EventSeeder extends Seeder
      */
     public function run()
     {   
-        $randomStart = Carbon::today()->subDays(mt_rand(0, 365));
-        $randomEnd = $randomStart->subDays(mt_rand(0, 10));
+        $rand1=mt_rand(01, 23);
+        $rand2=$rand1+2;
+        $rnDate = mt_rand(01, 28);
+        $randomStart = 'Mon Dec '.$rnDate.' 2022 '.$rand1.':30:00 GMT+0300 (Москва, стандартное время)';
+        $randomEnd = 'Mon Dec 19 2022 '.$rand2.':30:00 GMT+0300 (Москва, стандартное время)';
         DB::table('events')->insertOrIgnore([
             'name' => Str::random(10),
             'description' => Str::random(20),
