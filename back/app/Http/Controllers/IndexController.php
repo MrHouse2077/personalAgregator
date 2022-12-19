@@ -26,11 +26,9 @@ class IndexController extends Controller
         if (! $user || ! Hash::check($request->password, $user->password)) {
             return RequestHelper::write(402, 'В доступе отказано');
         }
-        $token = $user->createToken("token_name")->plainTextToken;
-        $user->token = $token;
-        $user->save();
+
         $data = [
-            "token" => $user->token,
+            "token" => $user->createToken("token_name")->plainTextToken,
             "name" => $user->name,
             "login" => $user->login,
             "email" => $user->email,
@@ -115,14 +113,9 @@ class IndexController extends Controller
         $user->password = Hash::make($request->password);
         $user->privacy = 1;
         $user->role = 2;
-        $user->token = "";
-        $user->save();
-        $token = $user->createToken("token_name")->plainTextToken;
-        $user->token = $token;
         $user->save();
         $data = [
-            "token" => $token,
-            "name" => $user->name,
+            "token" => $user->createToken("token_name")->plainTextToken,
             "login" => $user->login,
             "email" => $user->email,
         ]; 

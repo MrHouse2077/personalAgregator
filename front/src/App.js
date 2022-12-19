@@ -34,7 +34,6 @@ function App() {
     copy.auth.token = data.data.token;
     copy.auth.email = data.data.email;
     copy.auth.login = data.data.login;
-    copy.auth.name = data.data.name;
 
     localStorage.setItem('token', data.data.token);
    
@@ -46,6 +45,7 @@ function App() {
   }
   function logout(){
     setAuth(def);
+    localStorage.removeItem('token');
     navigate('/', {authData: dataApp});
   }
   return (
