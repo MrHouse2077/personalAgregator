@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   NavLink,
   useParams,
+  useNavigate,
 } from "react-router-dom";
-
+import Requests from "../../Requests";
 import {
   MDBCol,
   MDBContainer,
@@ -24,6 +25,35 @@ import {
 
 import UserPage from "../../Pages/UserPage/UserPage";
 export default function ProfilePage(props) {
+  const token = localStorage.getItem('token');
+  function checkToken(){
+    Requests(
+      {
+          method:'post', 
+          url: "/checkToken",
+          data: {token: token},
+          callback: restore,
+      }
+    )
+  }
+  function restore(data){
+    let page = window.location.pathname;
+    props.restoreData(data, page)
+  }
+  
+  const navigate = useNavigate();
+  useEffect(() => {     
+    if(!token){
+      navigate('/');
+    }
+    else if(props.authData.login == null){
+      checkToken();
+    }
+    else{
+      console.log("ok!");
+    }
+
+  });
   const {log} = useParams();
   return (
     <section style={{ backgroundColor: '#eee' }}>
@@ -33,7 +63,7 @@ export default function ProfilePage(props) {
             <MDBBreadcrumb className="bg-light rounded-3 p-3 mb-4">
               <MDBBreadcrumbItem>
                 <NavLink to="/home">
-                  <div >Home</div>
+                  <div >Home </div>
                 </NavLink>
               </MDBBreadcrumbItem>
               <MDBBreadcrumbItem active>{log}</MDBBreadcrumbItem>

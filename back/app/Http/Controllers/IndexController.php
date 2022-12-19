@@ -42,7 +42,7 @@ class IndexController extends Controller
     function checkToken(Request $request){
         $token = \Laravel\Sanctum\PersonalAccessToken::findToken($request->token);
         if(!$token){
-            return RequestHelper::write(402, 'It isn\'t token');
+            return RequestHelper::write(402, 'Не токен');
         }
         $user = $token->tokenable;
 
@@ -50,7 +50,7 @@ class IndexController extends Controller
             return RequestHelper::write(402, 'В доступе отказано');
         }
         $data = [
-            "token" => $request->token,
+            "login" => $user->login,
             "email" => $user->email,
         ];
         return RequestHelper::write(200, 'sucess', $data);

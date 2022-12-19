@@ -34,14 +34,18 @@ function App() {
     copy.auth.token = data.data.token;
     copy.auth.email = data.data.email;
     copy.auth.login = data.data.login;
-
     localStorage.setItem('token', data.data.token);
-   
     setAuth(copy);
-
-    
-
     navigate('/home', {authData: dataApp});
+  }
+  function restoreAuthData(data, page){
+    let copy = Object.assign([], dataApp);
+    copy.auth.token = localStorage.getItem('token');;
+    copy.auth.email = data.data.email;
+    copy.auth.login = data.data.login;
+    
+    setAuth(copy);
+    navigate(page, {authData: dataApp});
   }
   function logout(){
     setAuth(def);
@@ -56,13 +60,15 @@ function App() {
            setAuthData={setAuthData}/>} />
         <Route path="/home" element={<Home 
           authData={dataApp.auth}
+          restoreData={restoreAuthData}
           logout={logout}/>} />
         <Route path="/Register" element={<SignUpPage 
           setAuthData={setAuthData}
           authData={dataApp.auth}/>} />
         {/* <Route path="/PassReset" element={<ResetPassPage/>} /> */}
-        <Route path="/user/:log/ProfilePage" element={<AccountLayout auth={dataApp.auth}
+        <Route path="/user/:log/ProfilePage" element={<AccountLayout authData={dataApp.auth}
            setAuthData={setAuthData}
+           restoreData={restoreAuthData}
            logout={logout}/>}/>
         
         {/* <Route path="login" element={<Login

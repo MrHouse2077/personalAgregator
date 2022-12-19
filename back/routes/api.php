@@ -18,7 +18,7 @@ use App\Http\Controllers\IndexController;
 Route::prefix('v1')->group(function () {
 
     Route::post('/login', [IndexController::class, 'indexAction']);
-    Route::post('/chekToken', [IndexController::class, 'checkToken']);
+    Route::post('/checkToken', [IndexController::class, 'checkToken']);
     Route::post('/getSearchResult', [IndexController::class, 'findUserAction']);
     Route::post('/register', [IndexController::class, 'registerUserAction']);
     Route::get('/logout', function () {    
