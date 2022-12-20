@@ -323,7 +323,8 @@ export default function ProfilePage(props) {
                         <TextField 
                           autoComplete="given-name"
                           name="name"
-                          value={userInfo.name} 
+                          key={userInfo.name}
+                          defaultValue={userInfo.name}
                           disabled={userInfo.flag}
                           required
                           fullWidth  
@@ -380,7 +381,8 @@ export default function ProfilePage(props) {
                   
                   label="Email Address"
                   name="email"
-                  value={userInfo.email}
+                  key={userInfo.email}
+                  defaultValue={userInfo.email}
                   disabled={userInfo.flag}
                   onChange = {(evt)=>{
                     Validator(
