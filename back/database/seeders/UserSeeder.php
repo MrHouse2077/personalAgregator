@@ -16,15 +16,14 @@ class UserSeeder extends Seeder
      */
     public function run()
     {   
-        $randmail = Str::random(6);
-        $endmail = '@mail.com';
+
         DB::table('users')->insertOrIgnore([
-            'name' => Str::random(10),
-            'login' => Str::random(5),
-            'email' => $randmail.''.$endmail,
+            'name' => 'admin',
+            'login' => 'adminN1',
+            'email' => 'admin@mail.com',
             'password' => Hash::make(12345),
             'privacy' => 1,
-            'role' => 2
+            'role' => 1,
         ]);
         
     }

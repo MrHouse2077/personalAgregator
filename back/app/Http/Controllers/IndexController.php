@@ -121,4 +121,13 @@ class IndexController extends Controller
         ]; 
         return RequestHelper::write(200, 'sucess', $data);
     }
+    function getUserAction(Request $request){
+        $user = User::where('login', $request->login)->first();    
+        $data = [
+            'name' => $user->name,
+            'email' => $user->email,
+            'privacy' => $user->privacy,
+        ];
+        return RequestHelper::write(201, 'success', $data);
+    }
 }

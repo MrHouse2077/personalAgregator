@@ -41,7 +41,7 @@ function Home(props) {
   
         <MainLayout  authData={props.authData} logout={props.logout}>
        
-        <Schedule log={props.authData.login}/>
+        <Schedule log={props.authData.login} views={['day', 'week']} />
   
         </MainLayout>
   

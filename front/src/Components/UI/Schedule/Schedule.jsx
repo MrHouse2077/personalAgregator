@@ -13,6 +13,7 @@ let date = `${current.getFullYear()}${current.getMonth()+1}${current.getDate()}`
 
 
 function Schedule (props){
+  const views = props.views;
   function sendEvent(eventsData, url){
     Requests(
       {
@@ -126,7 +127,7 @@ function Schedule (props){
             <React.Fragment>
               
                 <Scheduler
-                  
+                    views={views}
                     dataSource={eventData.events}
                     defaultCurrentDate={date}
                     onAppointmentAdded={addEvent}
