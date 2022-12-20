@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Repeat extends Model
 {
     protected $table = 'repeats';
-
+    public $timestamps = false;
     public function event()
     {
         return $this->hasMany(Event::class);

@@ -38,26 +38,28 @@ function App() {
     setAuth(copy);
     navigate('/home', {authData: dataApp});
   }
-  function restoreAuthData(data, page){
+  function restoreAuthData(data){
     let copy = Object.assign([], dataApp);
-    copy.auth.token = localStorage.getItem('token');;
+    copy.auth.token = localStorage.getItem('token');
     copy.auth.email = data.data.email;
     copy.auth.login = data.data.login;
-    
     setAuth(copy);
+    let page = localStorage.getItem('page');
     navigate(page, {authData: dataApp});
   }
   function logout(){
     setAuth(def);
     localStorage.removeItem('token');
+    localStorage.removeItem('page');
     navigate('/', {authData: dataApp});
   }
   return (
     <div className="App">
       <Routes>
         <Route path="/" element={<StartPage 
-           auth={dataApp.auth}
-           setAuthData={setAuthData}/>} />
+           authData={dataApp.auth}
+           setAuthData={setAuthData}
+           restoreData={restoreAuthData}/>} />
         <Route path="/home" element={<Home 
           authData={dataApp.auth}
           restoreData={restoreAuthData}

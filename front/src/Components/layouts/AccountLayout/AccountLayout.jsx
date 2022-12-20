@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   NavLink,
   useParams,
@@ -25,35 +25,37 @@ import {
 
 import UserPage from "../../Pages/UserPage/UserPage";
 export default function ProfilePage(props) {
+  const page = window.location.pathname;
+  let [pageData, setPage] = useState(page.substring(1));
   const token = localStorage.getItem('token');
   function checkToken(){
     Requests(
       {
           method:'post', 
           url: "/checkToken",
-          data: {token: token},
+          data: {token: token, page:window.location.pathname},
           callback: restore,
       }
     )
   }
   function restore(data){
-    let page = window.location.pathname;
-    props.restoreData(data, page)
+    props.restoreData(data)
   }
-  
   const navigate = useNavigate();
   useEffect(() => {     
+    
     if(!token){
       navigate('/');
     }
-    else if(props.authData.login == null){
+    else if(props.authData.login== null){
       checkToken();
     }
     else{
-      console.log("ok!");
+      localStorage.setItem("page", pageData);
     }
+    
 
-  });
+  }, [pageData]);
   const {log} = useParams();
   return (
     <section style={{ backgroundColor: '#eee' }}>

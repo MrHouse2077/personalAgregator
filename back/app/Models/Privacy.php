@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Privacy extends Model
 {
     protected $table = 'privacies';
-
+    public $timestamps = false;
     public function user()
     {
         return $this->hasMany(User::class);

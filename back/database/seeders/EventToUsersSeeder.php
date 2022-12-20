@@ -22,6 +22,11 @@ class EventToUsersSeeder extends Seeder
             'event_id' => mt_rand(1, 13),
 
         ]);
+        ,DB::table('events_users')->insertOrIgnore([
+            'user_id' => mt_rand(2, 3),
+            'event_id' => mt_rand(1, 13),
+
+        ]);
         
     }
 }

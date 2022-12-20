@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Requests from "../../Requests";
 import Modal from '../../UI/Modal/Modal'
 import Validator from "../../Validator";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 
 import Avatar from '@mui/material/Avatar';
@@ -48,6 +48,29 @@ const theme = createTheme({
   });
 
 export default function StartPage(props){
+  const token = localStorage.getItem('token');
+  function checkToken(){
+    Requests(
+      {
+          method:'post', 
+          url: "/checkToken",
+          data: {token: token},
+          callback: restore,
+      }
+    )
+  }
+  function restore(data){
+    props.restoreData(data)
+  }
+  const navigate = useNavigate();
+  useEffect(() => {     
+    if(token){
+      console.log(1);
+        checkToken();
+    }
+
+    
+  });
   let [modal, setModal] = useState({
       msg: null,
       open: false,

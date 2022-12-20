@@ -29,6 +29,7 @@ class EventSeeder extends Seeder
             'start_time' => $randomStart,
             'end_time' => $randomEnd,
             'success' => mt_rand(0, 1),
+            'creator' => "adminN1";
         ]);
         
     }
