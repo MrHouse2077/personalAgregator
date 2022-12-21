@@ -130,4 +130,32 @@ class IndexController extends Controller
         ];
         return RequestHelper::write(201, 'success', $data);
     }
+    function updateUserAction(Request $request){
+        $givenuser = User::where('email', $request->data->email)->get();
+        dd($givenuser);
+        //     if($givenuser!= null){
+        //         return RequestHelper::write(409, 'По данному адресу уже существует аккаунт', null);
+        //     }
+        // $givenuser = User::where('login', $request->login)->first();
+        //     if($givenuser!= null){
+        //         return RequestHelper::write(409, 'Данный логин занят, попробуйте другой', null);
+        //     }
+        
+    
+        $user = new User;
+
+        $user->name = $request->name;
+        $user->login = $request->login;
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password);
+        $user->privacy = 1;
+        $user->role = 2;
+        $user->save();
+        $data = [
+            "token" => $user->createToken("token_name")->plainTextToken,
+            "login" => $user->login,
+            "email" => $user->email,
+        ]; 
+        return RequestHelper::write(200, 'sucess', $data);
+    }
 }

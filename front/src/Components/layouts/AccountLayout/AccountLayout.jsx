@@ -69,17 +69,9 @@ export default function ProfilePage(props) {
   //   name = userInfo.name;
   // }
  
-  function saveState(data, fieldElement){
-          
-    let copy = Object.assign({}, checkvalues);
-    copy[fieldElement].value = data[fieldElement].value;
-    copy[fieldElement].touched = data[fieldElement].touched;
-    copy[fieldElement].valid = data[fieldElement].valid;
-    copy[fieldElement].msgFaild = data[fieldElement].msgFaild;
-    checkSet(copy);
-  }
+  
   let [checkvalues, checkSet] = useState({
-    fieldName: {
+    fieldname: {
         flag : null,
         value: null,
         msgFaild: null,
@@ -96,7 +88,7 @@ export default function ProfilePage(props) {
             },
         ],
      },
-    fieldLogin: {
+    fieldlogin: {
         flag : null,
         value: null,
         msgFaild: null,
@@ -114,7 +106,7 @@ export default function ProfilePage(props) {
             },
         ],
      },
-    fieldEmail: {
+    fieldemail: {
         flag : null,
         value: null,
         msgFaild: null,
@@ -150,7 +142,15 @@ export default function ProfilePage(props) {
   },
   formValid: false,
 });
-
+function saveState(data, fieldElement){
+  console.log(data);
+  let copy = Object.assign({}, checkvalues);
+  copy[fieldElement].value = data[fieldElement].value;
+  copy[fieldElement].touched = data[fieldElement].touched;
+  copy[fieldElement].valid = data[fieldElement].valid;
+  copy[fieldElement].msgFaild = data[fieldElement].msgFaild;
+  checkSet(copy);
+}
   
   
   
@@ -217,9 +217,13 @@ export default function ProfilePage(props) {
     setModal(copy);
   }
   function updateCheck(data){
+    let fieldStart = "field"
     let par = data.target.name;
-    if(data.target.value != userInfo[par]){
-      console.log(1);
+    let field =fieldStart+par;
+    if(data.target.value != userInfo[par] && checkvalues[field].valid){
+      let jsonData = JSON.stringify({'field': data.target.name, 'text': data.target.value})
+      console.log(jsonData);
+      //updateUser(jsonData);
     }
   }
   
@@ -279,7 +283,7 @@ export default function ProfilePage(props) {
                   onChange = {(evt)=>{
                     Validator(
                       {
-                        fieldElement: "fieldLogin",
+                        fieldElement: "fieldlogin",
                         event: evt.target.value,
                         checkvalues: checkvalues,
                         callback: saveState,
@@ -289,26 +293,27 @@ export default function ProfilePage(props) {
                   onBlur = {(evt)=>{
                     Validator(
                       {
-                        fieldElement: "fieldLogin",
+                        fieldElement: "fieldlogin",
                         event: evt.target.value,
                         checkvalues: checkvalues,
                         callback: saveState,
                       }
                     )
+                    updateCheck(evt);
                   }}
                   error = {
                       
-                      (!checkvalues.fieldLogin.valid && checkvalues.fieldLogin.touched)
+                      (!checkvalues.fieldlogin.valid && checkvalues.fieldlogin.touched)
                       ?
                           true
                       :
                           false
                   }
-                  checkvalues = {checkvalues.fieldLogin}
+                  checkvalues = {checkvalues.fieldlogin}
                   helperText= {
-                    (!checkvalues.fieldLogin.valid && checkvalues.fieldLogin.touched)
+                    (!checkvalues.fieldlogin.valid && checkvalues.fieldlogin.touched)
                       ?
-                      checkvalues.fieldLogin.msgFaild
+                      checkvalues.fieldlogin.msgFaild
                       :
                           ""
                 }
@@ -334,7 +339,7 @@ export default function ProfilePage(props) {
                           onChange = {(evt)=>{
                             Validator(
                               {
-                                fieldElement: "fieldName",
+                                fieldElement: "fieldname",
                                 event: evt.target.value,
                                 checkvalues: checkvalues,
                                 callback: saveState,
@@ -344,26 +349,27 @@ export default function ProfilePage(props) {
                           onBlur = {(evt)=>{
                             Validator(
                               {
-                                fieldElement: "fieldName",
+                                fieldElement: "fieldname",
                                 event: evt.target.value,
                                 checkvalues: checkvalues,
                                 callback: saveState,
                               }
                             )
+                            updateCheck(evt);
                           }}
                           error = {
                               
-                              (!checkvalues.fieldName.valid && checkvalues.fieldName.touched)
+                              (!checkvalues.fieldname.valid && checkvalues.fieldname.touched)
                               ?
                                   true
                               :
                                   false
                           }
-                          checkvalues = {checkvalues.fieldName}
+                          checkvalues = {checkvalues.fieldname}
                           helperText= {
-                            (!checkvalues.fieldName.valid && checkvalues.fieldName.touched)
+                            (!checkvalues.fieldname.valid && checkvalues.fieldname.touched)
                               ?
-                              checkvalues.fieldName.msgFaild
+                              checkvalues.fieldname.msgFaild
                               :
                                   ""
                         }
@@ -387,7 +393,7 @@ export default function ProfilePage(props) {
                   onChange = {(evt)=>{
                     Validator(
                       {
-                        fieldElement: "fieldEmail",
+                        fieldElement: "fieldemail",
                         event: evt.target.value,
                         checkvalues: checkvalues,
                         callback: saveState,
@@ -397,26 +403,27 @@ export default function ProfilePage(props) {
                   onBlur = {(evt)=>{
                     Validator(
                       {
-                        fieldElement: "fieldEmail",
+                        fieldElement: "fieldemail",
                         event: evt.target.value,
                         checkvalues: checkvalues,
                         callback: saveState,
                       }
                     )
+                    updateCheck(evt);
                   }}
                   error = {
                       
-                      (!checkvalues.fieldEmail.valid && checkvalues.fieldEmail.touched)
+                      (!checkvalues.fieldemail.valid && checkvalues.fieldemail.touched)
                       ?
                           true
                       :
                           false
                   }
-                  checkvalues = {checkvalues.fieldEmail}
+                  checkvalues = {checkvalues.fieldemail}
                   helperText= {
-                    (!checkvalues.fieldEmail.valid && checkvalues.fieldEmail.touched)
+                    (!checkvalues.fieldemail.valid && checkvalues.fieldemail.touched)
                       ?
-                      checkvalues.fieldEmail.msgFaild
+                      checkvalues.fieldemail.msgFaild
                       :
                           ""
                 }

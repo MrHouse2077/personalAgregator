@@ -22,6 +22,7 @@ Route::prefix('v1')->group(function () {
     Route::post('/checkToken', [IndexController::class, 'checkToken']);
     Route::post('/getSearchResult', [IndexController::class, 'findUserAction']);
     Route::post('/getUser', [IndexController::class, 'getUserAction']);
+    Route::post('/updateUser', [IndexController::class, 'updateUserAction']);
     Route::post('/register', [IndexController::class, 'registerUserAction']);
     Route::get('/logout', function () {    
     });
