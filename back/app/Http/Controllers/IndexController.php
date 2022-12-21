@@ -131,8 +131,35 @@ class IndexController extends Controller
         return RequestHelper::write(201, 'success', $data);
     }
     function updateUserAction(Request $request){
-        $givenuser = User::where('email', $request->data->email)->get();
-        dd($givenuser);
+        $data = json_decode($request->data);
+        $user = User::where('login', $request->login)->first();
+        if($data->field=="name"){
+           
+            $user->name = $data->text;
+            $user->save();
+            $editedUser =[
+                "login" => $request->login,
+                "name" => $user->name,
+                "email" => $user->email,
+            ];
+            return RequestHelper::write(200, 'Успешно изменено!', $editedUser);
+        }
+        else if($data->field=="email"){
+            $users = User::where('email', $data->text)->get();
+        
+            if(count($users) > 0){
+                return RequestHelper::write(500, 'Почта занята!', NULL);
+            }
+
+            $user->email = $data->text;
+            $user->save();
+            $editedUser =[
+                "login" => $user->login,
+                "name" => $user->name,
+                "email" => $user->email,
+            ];
+            return RequestHelper::write(200, 'Успешно изменено!', $editedUser);
+        }
         //     if($givenuser!= null){
         //         return RequestHelper::write(409, 'По данному адресу уже существует аккаунт', null);
         //     }
@@ -142,20 +169,20 @@ class IndexController extends Controller
         //     }
         
     
-        $user = new User;
+        // $user = new User;
 
-        $user->name = $request->name;
-        $user->login = $request->login;
-        $user->email = $request->email;
-        $user->password = Hash::make($request->password);
-        $user->privacy = 1;
-        $user->role = 2;
-        $user->save();
-        $data = [
-            "token" => $user->createToken("token_name")->plainTextToken,
-            "login" => $user->login,
-            "email" => $user->email,
-        ]; 
-        return RequestHelper::write(200, 'sucess', $data);
+        // $user->name = $request->name;
+        // $user->login = $request->login;
+        // $user->email = $request->email;
+        // $user->password = Hash::make($request->password);
+        // $user->privacy = 1;
+        // $user->role = 2;
+        // $user->save();
+        // $data = [
+        //     "token" => $user->createToken("token_name")->plainTextToken,
+        //     "login" => $user->login,
+        //     "email" => $user->email,
+        // ]; 
+        // return RequestHelper::write(200, 'sucess', $data);
     }
 }

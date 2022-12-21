@@ -59,15 +59,7 @@ export default function ProfilePage(props) {
 
   }, [pageData]);
 
-  // let email;
-  // let name;
-  // if (!userInfo.mail && !userInfo.name) {
-  //   email = "";
-  //   name= "";
-  // } else {;
-  //   email = userInfo.mail;
-  //   name = userInfo.name;
-  // }
+
  
   
   let [checkvalues, checkSet] = useState({
@@ -190,7 +182,7 @@ function saveState(data, fieldElement){
           method:'post', 
           url: "/updateUser",
           data: {data: data, login: log},
-          callback: renderInfo,
+          callback: onRecieve,
       }
     )
   }
@@ -208,8 +200,16 @@ function saveState(data, fieldElement){
   }
   function onRecieve(data){
     setModal({msg:data.msg, open:true});
-    
-    props.setAuthData(data);
+    console.log(data);
+    let authData ={
+      data: {
+        email:data.data.email,
+        login:data.data.login,
+        token:token,
+      }
+    }
+
+    props.setAuthData(authData);
   }
   function handleClose(){
     let copy = Object.assign([], modal);
@@ -223,7 +223,7 @@ function saveState(data, fieldElement){
     if(data.target.value != userInfo[par] && checkvalues[field].valid){
       let jsonData = JSON.stringify({'field': data.target.name, 'text': data.target.value})
       console.log(jsonData);
-      //updateUser(jsonData);
+      updateUser(jsonData);
     }
   }
   
@@ -271,52 +271,12 @@ function saveState(data, fieldElement){
 
                   <MDBCol sm="12">
                     <TextField 
-                  required
                   fullWidth
                   id="login"
                   name="login"
                   defaultValue={log}
-                  disabled={userInfo.flag} 
+                  disabled
                   label="Логин"
-                  
-                  autoComplete="family-name"
-                  onChange = {(evt)=>{
-                    Validator(
-                      {
-                        fieldElement: "fieldlogin",
-                        event: evt.target.value,
-                        checkvalues: checkvalues,
-                        callback: saveState,
-                      }
-                    )
-                  }}
-                  onBlur = {(evt)=>{
-                    Validator(
-                      {
-                        fieldElement: "fieldlogin",
-                        event: evt.target.value,
-                        checkvalues: checkvalues,
-                        callback: saveState,
-                      }
-                    )
-                    updateCheck(evt);
-                  }}
-                  error = {
-                      
-                      (!checkvalues.fieldlogin.valid && checkvalues.fieldlogin.touched)
-                      ?
-                          true
-                      :
-                          false
-                  }
-                  checkvalues = {checkvalues.fieldlogin}
-                  helperText= {
-                    (!checkvalues.fieldlogin.valid && checkvalues.fieldlogin.touched)
-                      ?
-                      checkvalues.fieldlogin.msgFaild
-                      :
-                          ""
-                }
                 />
                   </MDBCol>
                 </MDBRow>
