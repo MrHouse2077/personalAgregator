@@ -63,7 +63,6 @@ function Schedule (props){
   function renderEvents(data){
     let copy = Object.assign([], eventData);
     let event = data.event;
-    console.log(data);
     copy.events.id = data.data.id;
     copy.events.text = event.text;
     copy.events.description = event.description;
