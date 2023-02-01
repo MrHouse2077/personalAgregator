@@ -9,7 +9,8 @@ import Button from 'devextreme-react/button';
 
 
 let current = new Date();
-let date = `${current.getFullYear()}${current.getMonth()+1}${current.getDate()}`;
+
+let date = `${current.getFullYear()}, ${current.getMonth()+1}, ${current.getDate()}`;
 
 
 function Schedule (props){
