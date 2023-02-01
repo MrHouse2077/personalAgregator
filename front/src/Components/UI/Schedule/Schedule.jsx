@@ -81,7 +81,9 @@ function Schedule (props){
   const updateEvent = (evt)=>{
     let data = evt.appointmentData;
     let url = "/editEvent";
+   
     let jsonData = JSON.stringify(data);
+    
     sendEvent(jsonData, url);
   }
   const deleteEvent = (evt)=>{

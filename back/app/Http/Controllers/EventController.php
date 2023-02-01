@@ -78,7 +78,7 @@ class EventController extends Controller
                 $temp['name'] = $event->name;
             }
             if(isset($event->description)){
-                $temp['description'] = $event->name;
+                $temp['description'] = $event->description;
             }
             if(isset($event->repeat_type_id)){
                 $rules = DB::table('event_repeats')->where('event_id', $event->id)->first();
@@ -131,9 +131,14 @@ class EventController extends Controller
         if(isset($dataSent->text) && $dataSent->text!=""){
             $event->name = $dataSent->text;
         }
-        if(isset($dataSent->description)){
+        
+        if(!isset($dataSent->description) || $dataSent->description==""){
+            $event->description = "";
+        }
+        else{
             $event->description = $dataSent->description;
         }
+        
         $event->privacy_type_id = $user->privacy;
         $event->repeat_type_id = 1;
         $event->start_time = $dataSent->startDate;
