@@ -10,7 +10,7 @@ import Button from 'devextreme-react/button';
 
 let current = new Date();
 let date = `${current.getFullYear()}${current.getMonth()+1}${current.getDate()}`;
-
+console.log(current);
 
 function Schedule (props){
   const views = props.views;
@@ -81,8 +81,9 @@ function Schedule (props){
   const updateEvent = (evt)=>{
     let data = evt.appointmentData;
     let url = "/editEvent";
+   
     let jsonData = JSON.stringify(data);
-    console.log(jsonData);
+    
     sendEvent(jsonData, url);
   }
   const deleteEvent = (evt)=>{
@@ -129,7 +130,7 @@ function Schedule (props){
                 <Scheduler
                     views={views}
                     dataSource={eventData.events}
-                    defaultCurrentDate={date}
+                    defaultCurrentDate={current}
                     onAppointmentAdded={addEvent}
                     onAppointmentUpdated={updateEvent}
                     onAppointmentDeleted={deleteEvent}
