@@ -10,7 +10,7 @@ import Button from 'devextreme-react/button';
 
 let current = new Date();
 let date = `${current.getFullYear()}${current.getMonth()+1}${current.getDate()}`;
-
+console.log(current);
 
 function Schedule (props){
   const views = props.views;
@@ -130,7 +130,7 @@ function Schedule (props){
                 <Scheduler
                     views={views}
                     dataSource={eventData.events}
-                    defaultCurrentDate={date}
+                    defaultCurrentDate={current}
                     onAppointmentAdded={addEvent}
                     onAppointmentUpdated={updateEvent}
                     onAppointmentDeleted={deleteEvent}

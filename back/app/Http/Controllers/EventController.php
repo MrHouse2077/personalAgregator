@@ -131,7 +131,9 @@ class EventController extends Controller
         if(isset($dataSent->text) && $dataSent->text!=""){
             $event->name = $dataSent->text;
         }
-        
+        else{
+            $event->name = "";
+        }
         if(!isset($dataSent->description) || $dataSent->description==""){
             $event->description = "";
         }
