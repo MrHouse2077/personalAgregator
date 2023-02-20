@@ -11,7 +11,7 @@ import Button from 'devextreme-react/button';
 let current = new Date();
 let date = `${current.getFullYear()}${current.getMonth()+1}${current.getDate()}`;
 console.log(current);
-
+const token = localStorage.getItem('token');
 function Schedule (props){
   const views = props.views;
   function sendEvent(eventsData, url){
@@ -19,7 +19,7 @@ function Schedule (props){
       {
           method:'post', 
           url: url,
-          data: {event: eventsData, login: props.log},
+          data: {event: eventsData, login: props.log, token: token},
           callback: renderEvents,
       }
     )
@@ -29,7 +29,7 @@ function Schedule (props){
       {
           method:'post', 
           url: "/getEvents",
-          data: {login: props.log},
+          data: {login: props.log, token: token},
           callback: initialRender,
       }
     )
@@ -96,7 +96,7 @@ function Schedule (props){
       {
           method:'post', 
           url: "/deleteEvent",
-          data: {data:id, login: props.log},
+          data: {data:id, login: props.log, token: token},
           callback: onDelete,
       }
     )

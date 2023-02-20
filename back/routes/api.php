@@ -17,23 +17,18 @@ use App\Http\Controllers\EventController;
 */
 
 Route::prefix('v1')->group(function () {
-
     Route::post('/login', [IndexController::class, 'indexAction']);
     Route::post('/checkToken', [IndexController::class, 'checkToken']);
-    Route::post('/getSearchResult', [IndexController::class, 'findUserAction']);
-    Route::post('/getUser', [IndexController::class, 'getUserAction']);
-    Route::post('/updateUser', [IndexController::class, 'updateUserAction']);
     Route::post('/register', [IndexController::class, 'registerUserAction']);
-    Route::get('/logout', function () {    
-    });
 
-    Route::post('/addEvent', [EventController::class, 'addEventAction']);
-    Route::post('/getEvents', [EventController::class, 'getEventsAction']);
-    Route::post('/editEvent', [EventController::class, 'editEventAction']);
-    Route::post('/deleteEvent', [EventController::class, 'deleteEventAction']);
-
-    Route::middleware([TokenAuth::class])->post('/lk', function () {
-        return "скрытая зона";
+    Route::middleware([TokenAuth::class])->group(function () {
+        Route::post('/getSearchResult', [IndexController::class, 'findUserAction']);
+        Route::post('/getUser', [IndexController::class, 'getUserAction']);
+        Route::post('/updateUser', [IndexController::class, 'updateUserAction']);
+        Route::post('/addEvent', [EventController::class, 'addEventAction']);
+        Route::post('/getEvents', [EventController::class, 'getEventsAction']);
+        Route::post('/editEvent', [EventController::class, 'editEventAction']);
+        Route::post('/deleteEvent', [EventController::class, 'deleteEventAction']);
     });
 
 });

@@ -43,15 +43,12 @@ export default function ProfilePage(props) {
   
   const navigate = useNavigate();
   useEffect(() => {     
-    getUser();
+    
     if(!token){
       navigate('/');
     }
-    else if(props.authData.login== null){
-      checkToken();
-    }
     else{
-      
+      getUser();
       localStorage.setItem("page", pageData);
   
     }
@@ -151,16 +148,7 @@ function saveState(data, fieldElement){
     open: false,
 });
   const token = localStorage.getItem('token');
-  function checkToken(){
-    Requests(
-      {
-          method:'post', 
-          url: "/checkToken",
-          data: {token: token, page:window.location.pathname},
-          callback: restore,
-      }
-    )
-  }
+ 
   function restore(data){
     props.restoreData(data)
   }
@@ -171,7 +159,7 @@ function saveState(data, fieldElement){
       {
           method:'post', 
           url: "/getUser",
-          data: {login: log},
+          data: {login: log, token: token},
           callback: renderInfo,
       }
     )
@@ -181,7 +169,7 @@ function saveState(data, fieldElement){
       {
           method:'post', 
           url: "/updateUser",
-          data: {data: data, login: log},
+          data: {data: data, login: log, token: token},
           callback: onRecieve,
       }
     )

@@ -17,6 +17,7 @@ class TokenAuth
     public function handle(Request $request, Closure $next)
     {
         $token = \Laravel\Sanctum\PersonalAccessToken::findToken($request->token);
+        
         if(!$token){
             return response("no");
         }
@@ -26,7 +27,6 @@ class TokenAuth
         if(!$user){
             return response("no");
         }
-
         return $next($request);
     }
 }

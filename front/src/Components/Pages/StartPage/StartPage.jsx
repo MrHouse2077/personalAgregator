@@ -65,8 +65,10 @@ export default function StartPage(props){
   const navigate = useNavigate();
   useEffect(() => {     
     if(token){
-      console.log(1);
-        checkToken();
+      checkToken();
+    }
+    else{
+      
     }
 
     

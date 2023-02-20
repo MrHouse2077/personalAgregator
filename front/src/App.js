@@ -35,14 +35,16 @@ function App() {
     copy.auth.email = data.data.email;
     copy.auth.login = data.data.login;
     localStorage.setItem('token', data.data.token);
+    localStorage.setItem('login', data.data.login);
+    localStorage.setItem('email', data.data.email);
     setAuth(copy);
     navigate('/home', {authData: dataApp});
   }
   function restoreAuthData(data){
     let copy = Object.assign([], dataApp);
     copy.auth.token = localStorage.getItem('token');
-    copy.auth.email = data.data.email;
-    copy.auth.login = data.data.login;
+    copy.auth.email = localStorage.getItem('email');
+    copy.auth.login = localStorage.getItem('login');
     setAuth(copy);
     let page = localStorage.getItem('page');
     navigate(page, {authData: dataApp});
@@ -51,6 +53,8 @@ function App() {
     setAuth(def);
     localStorage.removeItem('token');
     localStorage.removeItem('page');
+    localStorage.removeItem('email');
+    localStorage.removeItem('login');
     navigate('/', {authData: dataApp});
   }
   return (

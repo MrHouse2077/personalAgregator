@@ -18,7 +18,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import Styles from './Header.module.scss';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { green, purple } from '@mui/material/colors';
-
+const token = localStorage.getItem('token');
 const theme = createTheme({
   palette: {
     primary: {
@@ -92,7 +92,7 @@ export default function PrimarySearchAppBar(props) {
       {
           method:'post', 
           url: "/getSearchResult",
-          data: {login: log},
+          data: {login: log, token: token},
           callback: RenderSearch,
       }
     )
@@ -156,6 +156,7 @@ export default function PrimarySearchAppBar(props) {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
+      {console.log(props.authData.login)}
       <Modal alert={alert} handleClose={handleClose}/>
       {(props.authData.login==null)? 
    
