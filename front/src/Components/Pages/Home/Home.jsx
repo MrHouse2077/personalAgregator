@@ -27,9 +27,9 @@ function Home(props) {
        
       <div >
   
-        <MainLayout  authData={props.authData} logout={props.logout}>
+        <MainLayout  logout={props.logout}>
        
-        <Schedule log={props.authData.login} views={['day', 'week']} />
+        <Schedule log={localStorage.getItem("login")} views={['day', 'week']} />
   
         </MainLayout>
   

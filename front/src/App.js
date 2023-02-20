@@ -38,16 +38,11 @@ function App() {
     localStorage.setItem('login', data.data.login);
     localStorage.setItem('email', data.data.email);
     setAuth(copy);
-    navigate('/home', {authData: dataApp});
+    navigate('/home');
   }
   function restoreAuthData(data){
-    let copy = Object.assign([], dataApp);
-    copy.auth.token = localStorage.getItem('token');
-    copy.auth.email = localStorage.getItem('email');
-    copy.auth.login = localStorage.getItem('login');
-    setAuth(copy);
     let page = localStorage.getItem('page');
-    navigate(page, {authData: dataApp});
+    navigate(page);
   }
   function logout(){
     setAuth(def);
@@ -61,18 +56,15 @@ function App() {
     <div className="App">
       <Routes>
         <Route path="/" element={<StartPage 
-           authData={dataApp.auth}
            setAuthData={setAuthData}
            restoreData={restoreAuthData}/>} />
         <Route path="/home" element={<Home 
-          authData={dataApp.auth}
           restoreData={restoreAuthData}
           logout={logout}/>} />
         <Route path="/Register" element={<SignUpPage 
-          setAuthData={setAuthData}
-          authData={dataApp.auth}/>} />
+          setAuthData={setAuthData}/>} />
         {/* <Route path="/PassReset" element={<ResetPassPage/>} /> */}
-        <Route path="/user/:log/ProfilePage" element={<AccountLayout authData={dataApp.auth}
+        <Route path="/user/:log/ProfilePage" element={<AccountLayout 
            setAuthData={setAuthData}
            restoreData={restoreAuthData}
            logout={logout}/>}/>

@@ -148,7 +148,9 @@ function saveState(data, fieldElement){
     open: false,
 });
   const token = localStorage.getItem('token');
- 
+  const login = localStorage.getItem('login');
+  const email = localStorage.getItem('email');
+  
   function restore(data){
     props.restoreData(data)
   }
@@ -181,7 +183,7 @@ function saveState(data, fieldElement){
     copy.name = data.data.name;
     copy.login = log;
     copy.privacy = data.data.privacy;
-    if(log==props.authData.login){
+    if(log==login){
       copy.flag = false;
     }
     setInfo(copy);
@@ -382,7 +384,7 @@ function saveState(data, fieldElement){
             </MDBCard>
 
             <Schedule 
-            log={props.authData.login}
+            log={login}
             views={['day']} 
             />
           </MDBCol>

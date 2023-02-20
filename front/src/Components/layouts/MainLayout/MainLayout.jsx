@@ -6,7 +6,7 @@ import  Header from '../../Header/Header';
 function MainLayout(props) {
     return (
       <div>
-        <Header authData={props.authData} logout={props.logout}/>
+        <Header logout={props.logout}/>
         <section >
           {props.children}
          

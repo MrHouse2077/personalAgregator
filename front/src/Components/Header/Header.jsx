@@ -19,6 +19,8 @@ import Styles from './Header.module.scss';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { green, purple } from '@mui/material/colors';
 const token = localStorage.getItem('token');
+const login = localStorage.getItem('login');
+const email = localStorage.getItem('email');
 const theme = createTheme({
   palette: {
     primary: {
@@ -156,9 +158,9 @@ export default function PrimarySearchAppBar(props) {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      {console.log(props.authData.login)}
+      {console.log(login)}
       <Modal alert={alert} handleClose={handleClose}/>
-      {(props.authData.login==null)? 
+      {(login==null)? 
    
         <NavLink to="/" className={Styles.link}>
           <MenuItem onClick={handleMenuClose}>
@@ -167,7 +169,7 @@ export default function PrimarySearchAppBar(props) {
         </NavLink>
       :
       <div>
-        <NavLink to={"/user/" + props.authData.login +"/ProfilePage"} className={Styles.link}>
+        <NavLink to={"/user/" + login +"/ProfilePage"} className={Styles.link}>
           <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
         </NavLink> 
         <MenuItem onClick={function(evt){handleMenuClose(); loggingOut()}} >Logout</MenuItem>
