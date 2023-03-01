@@ -35,7 +35,7 @@ class EventController extends Controller
         $event->end_time = $dataSent->endDate;
         $event->creator = $request->login;
         $event->save();
-        // $event->users()->attach($user);
+        $event->users()->attach($user);
         $id = $event->id;
         if(isset($dataSent->recurrenceRule) && $dataSent->recurrenceRule!=""){
             $parsedRules = ParseHelper::parse(';', $dataSent->recurrenceRule);
@@ -63,8 +63,9 @@ class EventController extends Controller
     }
     
     function getEventsAction(Request $request){
-        $events =  Event::where('creator', $request->login)->get();
+        $events =  Event::where('creator', $request->login)->get();  
         $data = [];
+        
         foreach ($events as $event){
             $temp =[
                 'id'=>$event->id,
@@ -121,7 +122,10 @@ class EventController extends Controller
             $data[] = $temp;
 
         }
-        
+     
+            if($data==null){
+                return RequestHelper::write(201, 'no events', null);
+            }
         return RequestHelper::write(200, 'sucess', $data);
     }
     function editEventAction(Request $request){

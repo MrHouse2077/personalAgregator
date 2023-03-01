@@ -2,8 +2,8 @@ import React, { useState, useEffect }from 'react';
  
 import 'devextreme/dist/css/dx.light.css';
 import Requests from "../../Requests";
-import Scheduler from 'devextreme-react/scheduler';
-import Button from 'devextreme-react/button';
+import Scheduler, { Resource } from 'devextreme-react/scheduler';
+import AutoComplete from "../AutoComplete/AutoComplete";
 
 
 
@@ -47,6 +47,10 @@ function Schedule (props){
   );
   function initialRender(data){
     let events = data.data;
+    
+    if(data.data == null){
+      return;
+    }
     let copy = Object.assign([], eventData);
     copy.events = events;
     for (let i = 0; i < events.length; i++) {
@@ -102,6 +106,16 @@ function Schedule (props){
       }
     )
   }
+  // function gettingUsers(){
+  //   Requests(
+  //     {
+  //         method:'post', 
+  //         url: "/deleteEvent",
+  //         data: {token: token},
+  //         callback: onDelete,
+  //     }
+  //   )
+  // }
   function onDelete(){
     
   }
@@ -116,6 +130,8 @@ function Schedule (props){
     }
   }
   let [eventData, setEvent] = useState(StateEvent);
+  // let [dataApp, setAuth] = useState(stateApp);
+  
   function onAppointmentFormOpening(evt) {
 
     const form = evt.form;
@@ -135,8 +151,14 @@ function Schedule (props){
                     onAppointmentAdded={addEvent}
                     onAppointmentUpdated={updateEvent}
                     onAppointmentDeleted={deleteEvent}
-                    onAppointmentFormOpening={function(evt){onAppointmentFormOpening(evt)}}
-                />      
+                    onAppointmentFormOpening={function(evt){onAppointmentFormOpening(evt)}}> 
+                  {/* <Resource
+                    fieldExpr="ownerId"
+                    allowMultiple={true}
+                    dataSource={resourcesData}
+                    label="Владелец"
+                    /> */}
+                </Scheduler>    
             </React.Fragment>
         )    
 }

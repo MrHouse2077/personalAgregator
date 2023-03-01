@@ -31,8 +31,8 @@ import Schedule from "../../UI/Schedule/Schedule";
 export default function ProfilePage(props) {
   const { log } = useParams();
   let [userInfo, setInfo] = useState({
-    email: "smt",
-    name: "fs",
+    email: "loading...",
+    name: "loading...",
     privacy: 1,
     login: log,
     img: "default.png",
