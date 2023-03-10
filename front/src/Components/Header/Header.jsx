@@ -13,6 +13,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import Modal from '../UI/Modal/Modal'
 import Requests from "../Requests";
+import AutoComplete from "../UI/AutoComplete/AutoComplete";
 import {useState} from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import Styles from './Header.module.scss';
@@ -77,6 +78,8 @@ export default function PrimarySearchAppBar(props) {
       open: false,
   });
 
+  let [search, setSearch] = useState(null);
+  
   function  handleClose(){
     let copy = Object.assign([], alert);
     copy.open = false;
@@ -92,7 +95,7 @@ export default function PrimarySearchAppBar(props) {
   function sendSearch(log){
     Requests(
       {
-          method:'post', 
+          method:'post',
           url: "/getSearchResult",
           data: {login: log, token: token},
           callback: RenderSearch,
@@ -131,6 +134,9 @@ export default function PrimarySearchAppBar(props) {
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
+  // function changeSet(value){
+  //   setSearch(value);
+  // }
   function loggingOut(){
       props.logout();
   }
@@ -193,7 +199,7 @@ export default function PrimarySearchAppBar(props) {
             component="div"
             sx={{ display: { xs: 'none', sm: 'block' } }}
           >
-            PA
+            DF
           </Typography>
 
           <Search onKeyDown={function(evt){searchStart(evt)}}>
@@ -202,9 +208,13 @@ export default function PrimarySearchAppBar(props) {
             </SearchIconWrapper>
             <StyledInputBase
               placeholder="Search…"
+              aria-controls="searchBar"
               inputProps={{ 'aria-label': 'search' }}
+              onChange={(evt)=>{setSearch(evt.target.value)}}
             />
           </Search>
+          {console.log(search)}
+          {/* <AutoComplete search={search} label ="searchBar"/> */}
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
 
@@ -233,6 +243,7 @@ export default function PrimarySearchAppBar(props) {
         </Toolbar>
       </AppBar>
       {renderMenu}
+      
     </Box>
     </ThemeProvider>
   );

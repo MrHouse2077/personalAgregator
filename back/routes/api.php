@@ -22,6 +22,7 @@ Route::prefix('v1')->group(function () {
     Route::post('/register', [IndexController::class, 'registerUserAction']);
 
     Route::middleware([TokenAuth::class])->group(function () {
+        Route::post('/getSearchSuggestions', [IndexController::class, 'userSearchAction']);
         Route::post('/getSearchResult', [IndexController::class, 'findUserAction']);
         Route::post('/getUser', [IndexController::class, 'getUserAction']);
         Route::post('/updateUser', [IndexController::class, 'updateUserAction']);

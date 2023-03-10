@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Models\Event;
 
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 use Illuminate\Http\Request;
 
@@ -128,6 +129,20 @@ class IndexController extends Controller
             'email' => $user->email,
             'privacy' => $user->privacy,
         ];
+        return RequestHelper::write(201, 'success', $data);
+    }
+    function userSearchAction(Request $request){
+        $users = User::all()->except($request->login);
+        $data = [];
+        foreach($users as $user){
+            if(Str::startsWith($user->login, $request->search)){
+                $user_data = [
+                    'name' =>  $user->name,
+                    'login' =>  $user->login,
+                ];
+                $data[] = $user_data;
+            }
+        }
         return RequestHelper::write(201, 'success', $data);
     }
     function updateUserAction(Request $request){
