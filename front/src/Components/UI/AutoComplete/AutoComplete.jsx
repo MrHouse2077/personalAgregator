@@ -11,6 +11,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { green, purple } from '@mui/material/colors';
 
 export default function AutoComplete(props) {
+  let anchorEl = props.anchor;
   const theme = createTheme({
     palette: {
       primary: {
@@ -24,7 +25,7 @@ export default function AutoComplete(props) {
   const token = localStorage.getItem('token');
   const login = localStorage.getItem('login');
   const email = localStorage.getItem('email');
-
+  
   let [alert, setAlert] = useState({
     msg: null,
     open: false,
@@ -33,37 +34,44 @@ export default function AutoComplete(props) {
 useEffect(()=>{
   suggestSearch(props.search);
 });
-function  handleClose(){
-  let copy = Object.assign([], alert);
-  copy.open = false;
-  setAlert(copy);
-};
+const [anchorBar, setAnchorBar] = React.useState(anchorEl);
+  const [mobileMoreAnchorBar, setMobileMoreAnchorBar] = React.useState(null);
 
-  const [anchorEl, setAnchorEl] = React.useState(null);
+ 
+  const isSearchOpen = Boolean(anchorBar);
 
 
-  
-  const isMenuOpen = Boolean(anchorEl);
-
-
-
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  
+  const handleSearchOpen = (event) => {
+    setAnchorBar(event.currentTarget);
   };
-  
-  function renderSuggestions(){
-      // const listItems = users.map((user) =>
-      // <NavLink to={"/user/" + login +"/ProfilePage"} className={Styles.link}>
-      //   <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      // </NavLink> 
-      // );
-      // return (
-      //   <ul>{listItems}</ul>
-      // );
-  }
 
+  const handleMobileSearchClose = () => {
+    setMobileMoreAnchorBar(null);
+  };
+
+  const handleSearchClose = () => {
+    setAnchorBar(null);
+    handleMobileSearchClose();
+  };
+  const handleMobileSearchOpen = (event) => {
+    setMobileMoreAnchorBar(event.currentTarget);
+  };
+  const [sugList, setList] = React.useState(null);
+
+  
+ 
+  function renderSuggestions(data){
+      const listItems = data.data.map((user) =>{console.log(1)}
+      // <NavLink key={user.login} to={"/user/" + user.login +"/ProfilePage"} className={Styles.link}>
+      //   <MenuItem >{user.name}</MenuItem>
+      // </NavLink> 
+      );    
+      //setList(listItems);
+      
+  }
+  // function showSuggestions(list){
+    
+  // }
   function suggestSearch(search){
     Requests(
       {
@@ -89,10 +97,10 @@ function  handleClose(){
         vertical: 'top',
         horizontal: 'right',
       }}
-      open={isMenuOpen}
-      onClose={handleMenuClose}
+      open={isSearchOpen}
+      onClose={handleSearchClose}
     >
-      <Modal alert={alert} handleClose={handleClose}/>
+      <div>amogus</div>
       
       
     </Menu>

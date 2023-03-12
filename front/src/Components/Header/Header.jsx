@@ -164,7 +164,7 @@ export default function PrimarySearchAppBar(props) {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      {console.log(login)}
+      
       <Modal alert={alert} handleClose={handleClose}/>
       {(login==null)? 
    
@@ -213,8 +213,8 @@ export default function PrimarySearchAppBar(props) {
               onChange={(evt)=>{setSearch(evt.target.value)}}
             />
           </Search>
-          {console.log(search)}
-          {/* <AutoComplete search={search} label ="searchBar"/> */}
+            
+          <AutoComplete search={search} label ="searchBar"/>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
 
