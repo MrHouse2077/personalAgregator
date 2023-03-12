@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('friendshps', function (Blueprint $table) {
+        Schema::create('friendships', function (Blueprint $table) {
             $table->id();
             $table->integer('friend_id1');
             $table->integer('friend_id2');

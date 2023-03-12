@@ -39,6 +39,7 @@ export default function ProfilePage(props) {
     flag:true,
   });
   const page = window.location.pathname;
+  let [friendshipData, setFriendship] = useState("loading");
   let [pageData, setPage] = useState(page.substring(1));
   
   const navigate = useNavigate();
@@ -49,6 +50,7 @@ export default function ProfilePage(props) {
     }
     else{
       getUser();
+      checkFriend();
       localStorage.setItem("page", pageData);
   
     }
@@ -166,6 +168,36 @@ function saveState(data, fieldElement){
       }
     )
   }
+  function addFriend(){
+    Requests(
+      {
+          method:'post', 
+          url: "/addFriend",
+          data: {myLogin:login, login: log, token: token},
+          callback: onResponce,
+      }
+    )
+  }
+  function deleteFriend(){
+    Requests(
+      {
+          method:'post', 
+          url: "/deleteFriend",
+          data: {myLogin:login, login: log, token: token},
+          callback: onResponce,
+      }
+    )
+  }
+  function checkFriend(){
+    Requests(
+      {
+          method:'post', 
+          url: "/checkFriend",
+          data: {myLogin:login, login: log, token: token},
+          callback: onCheck,
+      }
+    )
+  }
   function updateUser(data){
     Requests(
       {
@@ -176,6 +208,13 @@ function saveState(data, fieldElement){
       }
     )
   }
+  function onResponce(data){
+    setModal({msg:data.msg, open:true});
+    setFriendship(data.data);
+  }
+  function onCheck(data){
+    setFriendship(data.data);
+  }
   function renderInfo(data){
     console.log(data);
     let copy = Object.assign([], userInfo);
@@ -183,6 +222,7 @@ function saveState(data, fieldElement){
     copy.name = data.data.name;
     copy.login = log;
     copy.privacy = data.data.privacy;
+    
     if(log==login){
       copy.flag = false;
     }
@@ -247,11 +287,19 @@ function saveState(data, fieldElement){
                   fluid />
                   <MDBRow>
                   
-                  
                 </MDBRow>
               </MDBCardBody>
             </MDBCard>
 
+          {(userInfo.flag==true)? 
+              (friendshipData==false)?
+                <button className={Styles.btn} onClick={addFriend}>  
+                    Добавить в друзья!    
+                </button>:
+                  <button className={Styles.btn} onClick={deleteFriend}>  
+                  Убрать из друзей    
+                  </button>
+          :null}
             
           </MDBCol>
           <MDBCol lg="8">

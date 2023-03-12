@@ -24,6 +24,9 @@ Route::prefix('v1')->group(function () {
     Route::middleware([TokenAuth::class])->group(function () {
         Route::post('/getSearchSuggestions', [IndexController::class, 'userSearchAction']);
         Route::post('/getSearchResult', [IndexController::class, 'findUserAction']);
+        Route::post('/addFriend', [IndexController::class, 'addFriendAction']);
+        Route::post('/checkFriend', [IndexController::class, 'checkFriendshipAction']);
+        Route::post('/deleteFriend', [IndexController::class, 'deleteFriendshipAction']);
         Route::post('/getUser', [IndexController::class, 'getUserAction']);
         Route::post('/updateUser', [IndexController::class, 'updateUserAction']);
         Route::post('/addEvent', [EventController::class, 'addEventAction']);

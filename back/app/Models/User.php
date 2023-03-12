@@ -50,4 +50,8 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Event::class);
     }
+    public function friendships()
+    {
+        return $this->belongsToMany(Friendship::class);
+    }
 }

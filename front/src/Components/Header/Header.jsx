@@ -253,9 +253,7 @@ export default function PrimarySearchAppBar(props) {
               aria-label="show 17 new notifications"
               color="inherit"
             >
-              <Badge badgeContent={0} color="error">
-                <FontAwesomeIcon icon={solid('bell')} />
-              </Badge>
+              
             </IconButton>
             <IconButton
               size="large"

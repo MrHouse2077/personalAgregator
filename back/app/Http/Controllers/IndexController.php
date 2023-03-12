@@ -10,10 +10,11 @@ use Illuminate\Validation\ValidationException;
 
 use App\Models\User;
 use App\Models\Event;
+use App\Models\Friendship;
 
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class IndexController extends Controller
@@ -144,6 +145,62 @@ class IndexController extends Controller
             }
         }
         return RequestHelper::write(201, 'success', $data);
+    }
+    function addFriendAction(Request $request){
+        $id1 = User::where('login', $request->myLogin)->first();
+        $id2 = User::where('login', $request->login)->first();
+        $data = [
+            'friend_id1' => $id1->id,
+            'friend_id2' => $id2->id,
+        ];
+        DB::table('friendships')->insert($data);
+        $statement = true;
+        return RequestHelper::write(200, 'Вы теперь друзья!', $statement);
+    }
+    function checkFriendshipAction(Request $request){
+        $id1 = User::where('login', $request->myLogin)->first();
+        $id2 = User::where('login', $request->login)->first();
+        $status1 = DB::table('friendships')->where([
+            ['friend_id1', '=', $id1->id],
+            ['friend_id2', '=', $id2->id],
+        ])->first();
+        $status2 = DB::table('friendships')->where([
+            ['friend_id1', '=', $id2->id],
+            ['friend_id2', '=', $id1->id],
+        ])->first();
+        if($status1==null && $status2==null){
+            $statement = false;
+            return RequestHelper::write(200, 'Не друзья', $statement);
+        }
+        else{
+            $statement = true;
+        return RequestHelper::write(200, 'Друзья!', $statement);
+        }
+        
+    }
+    function deleteFriendshipAction(Request $request){
+        $id1 = User::where('login', $request->myLogin)->first();
+        $id2 = User::where('login', $request->login)->first();
+        $status1 = DB::table('friendships')->where([
+            ['friend_id1', '=', $id1->id],
+            ['friend_id2', '=', $id2->id],
+        ])->first();
+        $id;
+        if($status1==null){
+            $status2 = DB::table('friendships')->where([
+                ['friend_id1', '=', $id2->id],
+                ['friend_id2', '=', $id1->id],
+            ])->first();
+            $id = $status2->id;
+        }else
+        {
+            $id = $status1->id;
+        }
+        DB::table('friendships')->where('id', $id)->delete();
+        $statement = false;
+        return RequestHelper::write(200, 'Вы больше не друзья!', $statement);
+  
+        
     }
     function updateUserAction(Request $request){
         $data = json_decode($request->data);
