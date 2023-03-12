@@ -18,7 +18,7 @@ import AccountLayout from './Components/layouts/AccountLayout/AccountLayout';
 let def =  {
   auth: 
       {
-          login: null,
+          login: null,  
           email: null,
           token: null 
       }

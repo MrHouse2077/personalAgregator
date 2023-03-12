@@ -227,7 +227,7 @@ function saveState(data, fieldElement){
             <MDBBreadcrumb className="bg-light rounded-3 p-3 mb-4">
               <MDBBreadcrumbItem>
                 <NavLink to="/home">
-                  <div >Home </div>
+                  <div >Главная</div>
                 </NavLink>
               </MDBBreadcrumbItem>
               <MDBBreadcrumbItem active>{log}</MDBBreadcrumbItem>
@@ -334,8 +334,7 @@ function saveState(data, fieldElement){
                   required
                   fullWidth
                   id="email"
-                  
-                  label="Email Address"
+                  label="Электронная почта"
                   name="email"
                   key={userInfo.email}
                   defaultValue={userInfo.email}

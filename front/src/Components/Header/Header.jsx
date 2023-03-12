@@ -5,6 +5,7 @@ import { solid, regular, brands, icon } from '@fortawesome/fontawesome-svg-core/
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
+import Grow from '@mui/material/Grow';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import InputBase from '@mui/material/InputBase';
@@ -114,7 +115,17 @@ export default function PrimarySearchAppBar(props) {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+  const [anchorSearch, setAnchorSearch] = React.useState(null);
 
+  const handleSearchClick = (event) => {
+    setAnchorSearch(event.currentTarget);
+  };
+
+  const handleSearchClose = () => {
+    setAnchorSearch(null);
+  };
+  const open = Boolean(anchorSearch);
+  const id = open ? 'popover' : undefined;
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
@@ -202,19 +213,38 @@ export default function PrimarySearchAppBar(props) {
             DF
           </Typography>
 
-          <Search onKeyDown={function(evt){searchStart(evt)}}>
+          <Search  onKeyDown={function(evt){searchStart(evt)}}>
             <SearchIconWrapper>
                 <FontAwesomeIcon icon={solid('magnifying-glass')} />
             </SearchIconWrapper>
             <StyledInputBase
-              placeholder="Search…"
+              placeholder="Поиск..."
               aria-controls="searchBar"
               inputProps={{ 'aria-label': 'search' }}
+              aria-describedby={id} 
+              onClick={handleSearchClick}
               onChange={(evt)=>{setSearch(evt.target.value)}}
             />
+            <Box>
+              <AutoComplete
+               label ="searchBar" 
+               id={id}
+               open={open}
+               anchorEl={anchorSearch}
+               onClose={handleSearchClose}
+               anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'center',
+              }}
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'center',
+              }}
+              search={search}
+              /> 
+            </Box>
           </Search>
             
-          <AutoComplete search={search} label ="searchBar"/>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
 

@@ -3,6 +3,9 @@ import React, { useState, useEffect }from 'react';
 import 'devextreme/dist/css/dx.light.css';
 import Requests from "../../Requests";
 import Scheduler, { Resource } from 'devextreme-react/scheduler';
+import { locale, loadMessages, formatMessage } from 'devextreme/localization';
+import ruMessages from 'devextreme/localization/messages/ru.json';
+
 
 
 
@@ -14,6 +17,13 @@ console.log(current);
 const token = localStorage.getItem('token');
 const login = localStorage.getItem('login');
 function Schedule (props){
+  class App extends React.Component {
+    constructor(props) {
+        super(props);
+        loadMessages(ruMessages);
+        locale(navigator.language);
+    }
+  }
   const views = props.views;
   function sendEvent(eventsData, url){
     Requests(
@@ -136,6 +146,7 @@ function Schedule (props){
 
     const form = evt.form;
     let items = form.option('items');
+    console.log(items[0]);
     items[0].items[2].items[0].visible = false;
     form.option('items', items)
 
@@ -155,7 +166,7 @@ function Schedule (props){
                   {/* <Resource
                     fieldExpr="ownerId"
                     allowMultiple={true}
-                    dataSource={resourcesData}
+                   // dataSource={resourcesData}
                     label="Владелец"
                     /> */}
                 </Scheduler>    
