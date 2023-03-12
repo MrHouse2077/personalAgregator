@@ -187,9 +187,9 @@ export default function PrimarySearchAppBar(props) {
       :
       <div>
         <NavLink to={"/user/" + login +"/ProfilePage"} className={Styles.link}>
-          <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+          <MenuItem onClick={handleMenuClose}>Профиль</MenuItem>
         </NavLink> 
-        <MenuItem onClick={function(evt){handleMenuClose(); loggingOut()}} >Logout</MenuItem>
+        <MenuItem onClick={function(evt){handleMenuClose(); loggingOut()}} >Выйти</MenuItem>
       </div>}
       
     </Menu>

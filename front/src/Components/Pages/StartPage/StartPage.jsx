@@ -27,7 +27,7 @@ function Copyright() {
     <Typography variant="body2" color="text.secondary" align="center" >
       {'Copyright © '}
       <Link color="inherit" href="https://youtu.be/dQw4w9WgXcQ">
-        PA
+        DF
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -186,7 +186,7 @@ export default function StartPage(props){
              <FontAwesomeIcon icon={solid('lock')} />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Вход
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
@@ -302,17 +302,12 @@ export default function StartPage(props){
             >
               Войти
             </Button>
-            <Grid container>
-              <Grid item xs>
-                <NavLink to="/passReset" variant="body2">
-                  Забыли пароль?
-                </NavLink>
-              </Grid>
-              <Grid item>
+            <Grid  container>
+
               <NavLink to="/Register" variant="body2">
                   Нет аккаунта? Зарегистрируйтесь!
-                </NavLink>
-              </Grid>
+              </NavLink>
+              
             </Grid>
           </Box>
         </Box>
