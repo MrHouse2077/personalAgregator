@@ -1,10 +1,14 @@
+
 import React, { useState, useEffect }from 'react';
- 
+import "devextreme-intl";
+
 import 'devextreme/dist/css/dx.light.css';
 import Requests from "../../Requests";
 import Scheduler, { Resource } from 'devextreme-react/scheduler';
+import ruMessages from "devextreme/localization/messages/ru.json";
 
 
+import { locale, loadMessages, formatMessage } from 'devextreme/localization';
 
 
 
@@ -138,14 +142,15 @@ function Schedule (props){
 
     const form = evt.form;
     let items = form.option('items');
-    console.log(items[0]);
-    items[0].items[0].label.text = "Название";
-    items[0].items[1].items[0].label.text = "Начало";
-    items[0].items[1].items[2].label.text = "Конец";
-    items[0].items[4].label.text = "Описание";
+    // console.log(items[0]);
+    // items[0].items[0].label.text = "Название";
+    // items[0].items[1].items[0].label.text = "Начало";
+    // items[0].items[1].items[2].label.text = "Конец";
+    // items[0].items[4].label.text = "Описание";
     items[0].items[2].items[0].visible = false;
     form.option('items', items)
-
+    loadMessages(ruMessages);
+    locale(navigator.language);
   }
         return (
             
