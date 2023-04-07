@@ -14,9 +14,10 @@ import { locale, loadMessages, formatMessage } from 'devextreme/localization';
 
 let current = new Date();
 let date = `${current.getFullYear()}${current.getMonth()+1}${current.getDate()}`;
-console.log(current);
+
 const token = localStorage.getItem('token');
 const login = localStorage.getItem('login');
+
 function Schedule (props){
   
   const views = props.views;
@@ -41,32 +42,47 @@ function Schedule (props){
     )
   }
   useEffect(() => {     
-    
-    // if(){
-    //   navigate('/');
-    // }
-    if(eventData.events.id==null && login!=null){
+    loadMessages(ruMessages);
+    locale("ru");
+    if(eventData.events.id==null && login!=null && eventData.friends.userId==null){
       getEvents();
     }
   }
   );
   function initialRender(data){
-    let events = data.data;
-    
-    if(data.data == null){
+    let jsondata = data.data;
+    let friends = data.data;
+    let events = JSON.parse(jsondata[0]); 
+    friends = JSON.parse(jsondata[1]); 
+
+
+    let copy = Object.assign([], eventData);
+    if(friends.length != 0){
+      copy.friends = friends
+      for (let i = 0; i < friends.length; i++) {
+        
+        copy.friends.userId = friends[i].id;
+        copy.friends.text = friends[i].name; 
+      }
+    }
+    if(events.length == 0 && friends.length != 0){
+      setEvent(copy);
+    }
+    if(events.length == 0){
       return;
     }
-    let copy = Object.assign([], eventData);
-    copy.events = events;
-    for (let i = 0; i < events.length; i++) {
-      
-      copy.events.id = events[i].id;
-      copy.events.text = events[i].text;
-      copy.events.description = events[i].description;
-      copy.events.startDate = events[i].startDate;
-      copy.events.recurrenceRule = events[i].recurrenceRule;
-      copy.events.endDate = events[i].endDate;
-      
+    else{
+      copy.events = events;
+      for (let i = 0; i < events.length; i++) {
+        
+        copy.events.id = events[i].id;
+        copy.events.text = events[i].text;
+        copy.events.description = events[i].description;
+        copy.events.startDate = events[i].startDate;
+        copy.events.recurrenceRule = events[i].recurrenceRule;
+        copy.events.endDate = events[i].endDate;
+        
+      }
     }
     setEvent(copy);
   }
@@ -111,16 +127,7 @@ function Schedule (props){
       }
     )
   }
-  // function gettingUsers(){
-  //   Requests(
-  //     {
-  //         method:'post', 
-  //         url: "/deleteEvent",
-  //         data: {token: token},
-  //         callback: onDelete,
-  //     }
-  //   )
-  // }
+
   function onDelete(){
     
   }
@@ -133,25 +140,24 @@ function Schedule (props){
       recurrenceRule: null,
       endDate: null,
 
+    },
+    friends: {
+      userId: null,
+      text: null,
+      color: '#727bd2',
     }
   }
   let [eventData, setEvent] = useState(StateEvent);
-  // let [dataApp, setAuth] = useState(stateApp);
-  
+
   function onAppointmentFormOpening(evt) {
 
     const form = evt.form;
     let items = form.option('items');
-    // console.log(items[0]);
-    // items[0].items[0].label.text = "Название";
-    // items[0].items[1].items[0].label.text = "Начало";
-    // items[0].items[1].items[2].label.text = "Конец";
-    // items[0].items[4].label.text = "Описание";
     items[0].items[2].items[0].visible = false;
     form.option('items', items)
-    loadMessages(ruMessages);
-    locale(navigator.language);
+    
   }
+  console.log(eventData.friends);
         return (
             
             <React.Fragment>
@@ -166,12 +172,13 @@ function Schedule (props){
                     onAppointmentDeleted={deleteEvent}
                     onAppointmentFormOpening={function(evt){onAppointmentFormOpening(evt)}}>
                        
-                  {/* <Resource
-                    fieldExpr="ownerId"
+                  <Resource
+                    fieldExpr="userId"
                     allowMultiple={true}
-                    dataSource={resourcesData}
+                    dataSource={eventData.friends}
                     label="Пользователи"
-                    /> */}
+                    useColorAsDefault="grey"
+                    />
                 </Scheduler>    
             </React.Fragment>
         )    

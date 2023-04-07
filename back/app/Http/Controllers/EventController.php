@@ -65,7 +65,45 @@ class EventController extends Controller
     function getEventsAction(Request $request){
         $events =  Event::where('creator', $request->login)->get();  
         $data = [];
-        
+        $id1 = User::where('login', $request->login)->first();
+        $friends1 = DB::table('friendships')->where([
+            ['friend_id1', '=', $id1->id],
+        ])->get();
+        $friends2 = DB::table('friendships')->where([
+            ['friend_id2', '=', $id1->id],
+        ])->get();
+        $friendshipFlag;
+        $all = $friends1->merge($friends2);
+        // dd($list);
+        $list = [];
+        foreach($all as $relation){
+            if($relation->friend_id1 == $id1->id){
+                $usr = User::where('id', $relation->friend_id2)->first();
+                $tmp = [
+                    "id" => $usr->id,
+                    "name" => $usr->name,
+                    "email" => $usr->email,
+                    "login" => $usr->login,
+                ];
+                array_push($list, $tmp);
+            }
+            else{
+                $usr = User::where('id', $relation->friend_id1)->first();
+                $tmp = [
+                    "id" => $usr->id,
+                    "name" => $usr->name,
+                    "email" => $usr->email,
+                    "login" => $usr->login,
+                ];
+                array_push($list, $tmp);
+            }
+        }
+
+        if(count($list)==0){
+            $friendshipFlag = false;
+        }else{
+            $friendshipFlag = true;
+        }
         foreach ($events as $event){
             $temp =[
                 'id'=>$event->id,
@@ -122,10 +160,18 @@ class EventController extends Controller
             $data[] = $temp;
 
         }
-     
-            if($data==null){
-                return RequestHelper::write(201, 'no events', null);
-            }
+        
+        if($data==null && $friendshipFlag==false){
+            return RequestHelper::write(201, 'no events', null);
+        }
+        $dataJSON = json_encode($data);
+        $listJSON = json_encode($list);
+        $data[0] = $dataJSON;
+        if($friendshipFlag==true){
+            
+            
+            $data[1] = $listJSON;
+        }
         return RequestHelper::write(200, 'sucess', $data);
     }
     function editEventAction(Request $request){
