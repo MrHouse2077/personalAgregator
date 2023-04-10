@@ -16,10 +16,10 @@ let current = new Date();
 let date = `${current.getFullYear()}${current.getMonth()+1}${current.getDate()}`;
 
 const token = localStorage.getItem('token');
-const login = localStorage.getItem('login');
-
+const email = localStorage.getItem('email');
+let all;
 function Schedule (props){
-  
+  const login = props.log;
   const views = props.views;
   function sendEvent(eventsData, url){
     Requests(
@@ -36,7 +36,7 @@ function Schedule (props){
       {
           method:'post', 
           url: "/getEvents",
-          data: {login: login, token: token},
+          data: {login: login, token: token, viewer: localStorage.getItem('login')},
           callback: initialRender,
       }
     )
@@ -44,7 +44,8 @@ function Schedule (props){
   useEffect(() => {     
     loadMessages(ruMessages);
     locale("ru");
-    if(eventData.events.id==null && login!=null && eventData.friends.userId==null){
+    all = "Все друзья";
+    if(eventData.events.id==null && login!=null && eventData.friends[0].id==null){
       getEvents();
     }
   }
@@ -52,18 +53,31 @@ function Schedule (props){
   function initialRender(data){
     let jsondata = data.data;
     let friends = data.data;
-    let events = JSON.parse(jsondata[0]); 
+    let myId;
+    let events = JSON.parse(jsondata[0]);
     friends = JSON.parse(jsondata[1]); 
-
-
+  
     let copy = Object.assign([], eventData);
+    console.log(friends.length);
     if(friends.length != 0){
+      let string
       copy.friends = friends
+       
       for (let i = 0; i < friends.length; i++) {
-        
-        copy.friends.userId = friends[i].id;
-        copy.friends.text = friends[i].name; 
+        copy.friends[i].id = friends[i].id;
+        if(friends[i].login == localStorage.getItem("login")){
+          myId = friends[i].id;
+        }
+        string = friends[i].name + ", @" + friends[i].login;
+        copy.friends[i].text = string; 
       }
+      let alls = {
+        "id": 0,
+        "text": all,
+      }
+      copy.friends.unshift(alls);
+      
+     
     }
     if(events.length == 0 && friends.length != 0){
       setEvent(copy);
@@ -80,28 +94,21 @@ function Schedule (props){
         copy.events.description = events[i].description;
         copy.events.startDate = events[i].startDate;
         copy.events.recurrenceRule = events[i].recurrenceRule;
-        copy.events.endDate = events[i].endDate;
-        
+        copy.events.endDate = events[i].endDate;         
+       
       }
     }
     setEvent(copy);
   }
   function renderEvents(data){
-    let copy = Object.assign([], eventData);
-    let event = data.event;
-    copy.events.id = data.data.id;
-    copy.events.text = event.text;
-    copy.events.description = event.description;
-    copy.events.startDate = event.startDate;
-    copy.events.recurrenceRule = event.recurrenceRule;
-    copy.events.endDate = event.endDate;
-    setEvent(copy);
+
    }
   const addEvent = (evt)=>{
+    console.log(evt.appointmentData);
     let data = evt.appointmentData;
     let url = "/addEvent";
     let jsonData = JSON.stringify(data);
-    
+    console.log(jsonData);
     sendEvent(jsonData, url);
   }
   const updateEvent = (evt)=>{
@@ -109,7 +116,7 @@ function Schedule (props){
     let url = "/editEvent";
    
     let jsonData = JSON.stringify(data);
-    
+    console.log(jsonData);
     sendEvent(jsonData, url);
   }
   const deleteEvent = (evt)=>{
@@ -141,23 +148,40 @@ function Schedule (props){
       endDate: null,
 
     },
-    friends: {
-      userId: null,
-      text: null,
-      color: '#727bd2',
-    }
+    friends: [
+      {
+        text: null,
+        id: null,
+        color: '#727bd2',
+      }
+    ]
   }
   let [eventData, setEvent] = useState(StateEvent);
-
+  
   function onAppointmentFormOpening(evt) {
-
-    const form = evt.form;
-    let items = form.option('items');
-    items[0].items[2].items[0].visible = false;
-    form.option('items', items)
+    const found = eventData.friends.find(obj => {
+      return obj.email === email;
+    });
+    let id = found.id;
+    if(login == localStorage.getItem("login") || evt.appointmentData.moderators!=undefined && 
+    (evt.appointmentData.moderators.includes(id) 
+    || evt.appointmentData.moderators.includes(0))){
+      const form = evt.form;
+      let items = form.option('items');
+      items[0].items[2].items[0].visible = false;
+      form.option('items', items)
+    }
+    else{
+      evt.cancel =true;
+      return;
+    }
+    
     
   }
-  console.log(eventData.friends);
+  function click(){
+    console.log("click!");
+  }
+  // console.log(eventData.friends);
         return (
             
             <React.Fragment>
@@ -170,15 +194,23 @@ function Schedule (props){
                     onAppointmentAdded={addEvent}
                     onAppointmentUpdated={updateEvent}
                     onAppointmentDeleted={deleteEvent}
+                    onAppointmentContextMenu={click}
                     onAppointmentFormOpening={function(evt){onAppointmentFormOpening(evt)}}>
                        
                   <Resource
-                    fieldExpr="userId"
+                    fieldExpr="moderators"
+                    allowMultiple={true}
+                    dataSource={eventData.friends}           
+                    label="Могут контролировать:"
+                    useColorAsDefault="grey"
+                  />
+                  <Resource
+                    fieldExpr="readers"
                     allowMultiple={true}
                     dataSource={eventData.friends}
-                    label="Пользователи"
+                    label="Могут видеть:"
                     useColorAsDefault="grey"
-                    />
+                  />
                 </Scheduler>    
             </React.Fragment>
         )    
