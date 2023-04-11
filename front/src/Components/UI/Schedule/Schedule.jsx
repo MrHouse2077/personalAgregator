@@ -5,7 +5,7 @@ import 'devextreme/dist/css/dx.light.css';
 import Requests from "../../Requests";
 import Scheduler, { Resource } from 'devextreme-react/scheduler';
 import ruMessages from "devextreme/localization/messages/ru.json";
-
+import enMessages from "devextreme/localization/messages/en.json";
 
 import { locale, loadMessages, formatMessage } from 'devextreme/localization';
 
@@ -16,7 +16,18 @@ let date = `${current.getFullYear()}${current.getMonth()+1}${current.getDate()}`
 
 const token = localStorage.getItem('token');
 const email = localStorage.getItem('email');
-let all;
+const languages ={
+    "ru":{
+      "all": "Bсе друзья",
+      "canRead": "Могут видеть:",
+      "canControl": "Могут контролировать:",
+    },
+    "en":{
+      "all": "All friends",
+      "canRead": "Can see:",
+      "canControl": "Can control:",
+    }
+};
 function Schedule (props){
   const login = props.log;
   const views = props.views;
@@ -41,10 +52,17 @@ function Schedule (props){
       }
     )
   }
-  useEffect(() => {     
-    loadMessages(ruMessages);
-    locale("ru");
-    all = "Все друзья";
+  useEffect(() => {
+    if(localStorage.getItem("lang")=="ru"){
+      loadMessages(ruMessages);
+      locale("ru");
+      
+    }
+    else if(localStorage.getItem("lang")=="en"){
+      loadMessages(enMessages);
+      locale("en");
+    }
+    
     if(eventData.events.id==null && login!=null && eventData.friends[0].id==null){
       getEvents();
     }
@@ -71,10 +89,20 @@ function Schedule (props){
         string = friends[i].name + ", @" + friends[i].login;
         copy.friends[i].text = string; 
       }
-      let alls = {
-        "id": 0,
-        "text": all,
+      let setting = localStorage.getItem("lang");
+      if(setting == "ru"){
+        var alls = {
+          "id": 0,
+          "text": languages.ru.all,
+        };
       }
+      else if(setting == "en"){
+        var alls = {
+          "id": 0,
+          "text": languages.en.all,
+        }
+      }
+      
       copy.friends.unshift(alls);
       
      
