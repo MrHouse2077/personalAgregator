@@ -29,7 +29,7 @@ function Home(props) {
   
         <MainLayout  logout={props.logout}>
        
-        <Schedule log={localStorage.getItem("login")} views={['day', 'week']} />
+        <Schedule log={localStorage.getItem("login")}  views={['day', 'week']} />
   
         </MainLayout>
   

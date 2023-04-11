@@ -23,10 +23,6 @@ class RightsSeeder extends Seeder
             'description' => 'Только просмотр',
         ]);
         DB::table('rights')->insertOrIgnore([
-            'id' => 3,
-            'description' => 'Редактирование',
-        ]);
-        DB::table('rights')->insertOrIgnore([
             'id' => 4,
             'description' => 'Полный контроль',
         ]);

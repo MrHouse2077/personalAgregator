@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('event_user', function (Blueprint $table) {
-            $table->integer('rights')->default('1');
+            $table->integer('rights')->default('4');
         });
     }
 

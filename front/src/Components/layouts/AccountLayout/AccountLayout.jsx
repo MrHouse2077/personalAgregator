@@ -291,7 +291,8 @@ function saveState(data, fieldElement){
               </MDBCardBody>
             </MDBCard>
 
-          {(userInfo.flag==true)? 
+          {(userInfo.flag!=true)? 
+            null:
               (friendshipData==false)?
                 <button className={Styles.btn} onClick={addFriend}>  
                     Добавить в друзья!    
@@ -299,7 +300,7 @@ function saveState(data, fieldElement){
                   <button className={Styles.btn} onClick={deleteFriend}>  
                   Убрать из друзей    
                   </button>
-          :null}
+          }
             
           </MDBCol>
           <MDBCol lg="8">
@@ -431,7 +432,7 @@ function saveState(data, fieldElement){
             </MDBCard>
 
             <Schedule 
-            log={login}
+            log={log}
             views={['day']} 
             />
           </MDBCol>

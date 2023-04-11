@@ -21,7 +21,7 @@ import Styles from './Header.module.scss';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { green, purple } from '@mui/material/colors';
 const token = localStorage.getItem('token');
-const login = localStorage.getItem('login');
+
 const email = localStorage.getItem('email');
 const theme = createTheme({
   palette: {
@@ -74,6 +74,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function PrimarySearchAppBar(props) {
+
   let [alert, setAlert] = useState({
       msg: null,
       open: false,
@@ -177,7 +178,7 @@ export default function PrimarySearchAppBar(props) {
     >
       
       <Modal alert={alert} handleClose={handleClose}/>
-      {(login==null)? 
+      {(props.login==null)? 
    
         <NavLink to="/" className={Styles.link}>
           <MenuItem onClick={handleMenuClose}>
@@ -186,7 +187,7 @@ export default function PrimarySearchAppBar(props) {
         </NavLink>
       :
       <div>
-        <NavLink to={"/user/" + login +"/ProfilePage"} className={Styles.link}>
+        <NavLink to={"/user/" + props.login +"/ProfilePage"} className={Styles.link}>
           <MenuItem onClick={handleMenuClose}>Профиль</MenuItem>
         </NavLink> 
         <MenuItem onClick={function(evt){handleMenuClose(); loggingOut()}} >Выйти</MenuItem>
@@ -248,13 +249,7 @@ export default function PrimarySearchAppBar(props) {
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
 
-            <IconButton
-              size="large"
-              aria-label="show 17 new notifications"
-              color="inherit"
-            >
               
-            </IconButton>
             <IconButton
               size="large"
               edge="end"
