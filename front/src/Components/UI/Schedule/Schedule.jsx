@@ -1,6 +1,5 @@
 
 import React, { useState, useEffect }from 'react';
-import "devextreme-intl";
 
 import 'devextreme/dist/css/dx.light.css';
 import Requests from "../../Requests";
@@ -32,6 +31,7 @@ function Schedule (props){
     )
   }
   function getEvents(){
+    console.log(localStorage.getItem('login'));
     Requests(
       {
           method:'post', 
@@ -162,7 +162,11 @@ function Schedule (props){
     const found = eventData.friends.find(obj => {
       return obj.email === email;
     });
-    let id = found.id;
+    let id;
+    if(found!=undefined){
+      id = found.id;
+    }
+    
     if(login == localStorage.getItem("login") || evt.appointmentData.moderators!=undefined && 
     (evt.appointmentData.moderators.includes(id) 
     || evt.appointmentData.moderators.includes(0))){
