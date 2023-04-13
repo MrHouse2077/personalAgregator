@@ -46,7 +46,7 @@ class EventController extends Controller
             }
         }
         if(property_exists($dataSent, 'readers')){
-            if(in_array(0, $dataSent->readers)){
+            if(in_array(0, $dataSent->readers)|| in_array(0, $dataSent->moderators)){
                 $user = DB::table('event_user')->where([
                     ['user_id', '=', 0],
                     ['event_id', '=', $id],
@@ -284,11 +284,13 @@ class EventController extends Controller
         $event->end_time = $dataSent->endDate;
         $event->creator = $request->login;
         $event->save();
+        $flagRead = true;
         if(isset($dataSent->moderators) && !empty($dataSent->moderators)){
 
             if(in_array(0, $dataSent->moderators)){
                 $event->users()->sync([$user->id]);
                 $event->users()->syncWithoutDetaching([0]);
+                $flagRead = false;
             }
             else{
                 $event->users()->sync($dataSent->moderators);
@@ -298,51 +300,58 @@ class EventController extends Controller
         else{
             $event->users()->sync([$user->id]);
         }
-        if(isset($dataSent->readers) && !empty($dataSent->readers)){
+        if(isset($dataSent->readers) && !empty($dataSent->readers) && $flagRead == true){
             
             if(in_array(0, $dataSent->readers)){
-            $usr = DB::table('event_user')->where([
-                ['user_id', '=', 0],
-                ['event_id', '=', $event->id],
-                ['rights', '=', 4],
-            ])->first();
-            if($usr==null){
-                $readers = [
-                    0 => ["rights" => 2],
-                    $user->id => ["rights" => 4]
-                ];
-                $event->users()->sync($readers);
-            }  
-        }
-        else{
-            $readers = [];
-            foreach($dataSent->readers as $reader){
                 $usr = DB::table('event_user')->where([
-                    ['user_id', '=', $reader],
-                    ['event_id', '=',  $event->id],   
+                    ['user_id', '=', 0],
+                    ['event_id', '=', $event->id],
+                    ['rights', '=', 4],
                 ])->first();
                 if($usr==null){
-                    
                     $readers = [
-                        $reader => ["rights" => 2],
+                        0 => ["rights" => 2],
+                        $user->id => ["rights" => 4]
                     ];
-                 
-                    $event->users()->syncWithoutDetaching($readers);
+                    $event->users()->sync($readers);
+                }  
+            }
+            else{
+                $readers = [];
+                foreach($dataSent->readers as $reader){
+                    $usr = DB::table('event_user')->where([
+                        ['user_id', '=', $reader],
+                        ['event_id', '=',  $event->id],   
+                    ])->first();
+                    if($usr==null){
+                        
+                        $readers = [
+                            $reader => ["rights" => 2],
+                        ];
+                    
+                        $event->users()->syncWithoutDetaching($readers);
 
+                    }
                 }
+                $readers[] = $user->id;
+                foreach($dataSent->moderators as $mod){
+                    $readers[] = $mod;
+                }
+                $event->users()->syncWithoutDetaching($readers);
+                
             }
-            $readers[] = $user->id;
-            foreach($dataSent->moderators as $mod){
-                $readers[] = $mod;
-            }
-            $event->users()->syncWithoutDetaching($readers);
-            
-        }
         }
         else{
+            $usr = DB::table('event_user')->where([
+                ['user_id', '=', $user->id],
+                ['event_id', '=',  $event->id],   
+            ])->first();
+            if($usr==null){
             $event->users()->syncWithoutDetaching([$user->id]);
+            }
         }
         if(isset($dataSent->recurrenceRule) && $dataSent->recurrenceRule!=""){
+            DB::table('event_repeats')->where([["event_id", "=", $event->id]])->delete();
             $parsedRules = ParseHelper::parse(';', $dataSent->recurrenceRule);
             $rulesArr = [];
             foreach($parsedRules['parsedInfo'] as $rule){
@@ -354,7 +363,7 @@ class EventController extends Controller
             $event->repeat_type_id = $repeat['type']; 
             $event->save(); 
             $data = [];
-            $data['event_id'] = $id;
+            $data['event_id'] = $event->id;
             foreach($repeat['rules'] as $row=>$rule){
                 $data[$row]=$rule;
                
