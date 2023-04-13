@@ -27,7 +27,25 @@ import {
   MDBListGroupItem
 } from 'mdb-react-ui-kit';
 import Schedule from "../../UI/Schedule/Schedule";
+const languages ={
+  "ru":{
+    "mainPage": "Главная",
+    "login": "Логин",
+    "name": "Имя",
+    "email": "Электронная почта",
+    "addFriend": "Добавить в друзья!",
+    "deleteFriend": "Убрать из друзей",
 
+  },
+  "en":{
+    "mainPage": "Main page",
+    "login": "Login",
+    "name": "Name",
+    "email": "Email",
+    "addFriend": "Add to friends!",
+    "deleteFriend": "Remove from friends",
+  }
+};
 export default function ProfilePage(props) {
   const { log } = useParams();
   let [userInfo, setInfo] = useState({
@@ -173,7 +191,7 @@ function saveState(data, fieldElement){
       {
           method:'post', 
           url: "/addFriend",
-          data: {myLogin:login, login: log, token: token},
+          data: {myLogin:login, login: log, token: token, lang: localStorage.getItem("lang")},
           callback: onResponce,
       }
     )
@@ -267,7 +285,7 @@ function saveState(data, fieldElement){
             <MDBBreadcrumb className="bg-light rounded-3 p-3 mb-4">
               <MDBBreadcrumbItem>
                 <NavLink to="/home">
-                  <div >Главная</div>
+                  <div >{(localStorage.getItem('lang')=="ru")?languages.ru.mainPage: languages.en.mainPage}</div>
                 </NavLink>
               </MDBBreadcrumbItem>
               <MDBBreadcrumbItem active>{log}</MDBBreadcrumbItem>
@@ -295,10 +313,10 @@ function saveState(data, fieldElement){
             null:
               (friendshipData==false)?
                 <button className={Styles.btn} onClick={addFriend}>  
-                    Добавить в друзья!    
+                    {(localStorage.getItem('lang')=="ru")?languages.ru.addFriend: languages.en.addFriend}
                 </button>:
                   <button className={Styles.btn} onClick={deleteFriend}>  
-                  Убрать из друзей    
+                  {(localStorage.getItem('lang')=="ru")?languages.ru.deleteFriend: languages.en.deleteFriend}   
                   </button>
           }
             
@@ -315,7 +333,7 @@ function saveState(data, fieldElement){
                   name="login"
                   defaultValue={log}
                   disabled
-                  label="Логин"
+                  label={(localStorage.getItem('lang')=="ru")?languages.ru.login: languages.en.login}
                 />
                   </MDBCol>
                 </MDBRow>
@@ -333,7 +351,7 @@ function saveState(data, fieldElement){
                           required
                           fullWidth  
                           id="firstName"
-                          label="Имя"
+                          label={(localStorage.getItem('lang')=="ru")?languages.ru.name: languages.en.name}
                           autoFocus
                           onChange = {(evt)=>{
                             Validator(
@@ -383,7 +401,7 @@ function saveState(data, fieldElement){
                   required
                   fullWidth
                   id="email"
-                  label="Электронная почта"
+                  label={(localStorage.getItem('lang')=="ru")?languages.ru.email: languages.en.email}
                   name="email"
                   key={userInfo.email}
                   defaultValue={userInfo.email}

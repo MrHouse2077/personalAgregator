@@ -188,7 +188,7 @@ function Schedule (props){
   
   function onAppointmentFormOpening(evt) {
     const found = eventData.friends.find(obj => {
-      return obj.email === email;
+      return obj.email == email;
     });
     let id;
     if(found!=undefined){
@@ -233,14 +233,14 @@ function Schedule (props){
                     fieldExpr="moderators"
                     allowMultiple={true}
                     dataSource={eventData.friends}           
-                    label="Могут контролировать:"
+                    label={(localStorage.getItem('lang')=="ru")?languages.ru.canControl: languages.en.canControl}
                     useColorAsDefault="grey"
                   />
                   <Resource
                     fieldExpr="readers"
                     allowMultiple={true}
                     dataSource={eventData.friends}
-                    label="Могут видеть:"
+                    label={(localStorage.getItem('lang')=="ru")?languages.ru.canRead: languages.en.canRead}
                     useColorAsDefault="grey"
                   />
                 </Scheduler>    

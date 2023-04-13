@@ -37,7 +37,9 @@ function App() {
     localStorage.setItem('token', data.data.token);
     localStorage.setItem('login', data.data.login);
     localStorage.setItem('email', data.data.email);
-    localStorage.setItem('lang', "ru");
+    if(localStorage.getItem("lang"==null)){
+      localStorage.setItem('lang', "ru");
+    }
     setAuth(copy);
     navigate('/home');
   }

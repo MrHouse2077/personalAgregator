@@ -61,7 +61,7 @@ useEffect(()=>{
       <Box className={Styles.box}>
       {sugList.data!=null? 
       sugList.data.map((user) =>{ return <NavLink key={user.login} to={"/user/" + user.login +"/ProfilePage"} className={Styles.link}>
-          <MenuItem >Логин:{user.login} Имя:{user.name} </MenuItem>
+          <MenuItem >{(localStorage.getItem('lang')=="ru")?"Логин": "Login"}{user.login} {(localStorage.getItem('lang')=="ru")?"Имя": "Name"}:{user.name} </MenuItem>
         </NavLink> 
       }):null  }  
       </Box>

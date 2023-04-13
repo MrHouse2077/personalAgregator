@@ -26,7 +26,13 @@ class IndexController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if (! $user || ! Hash::check($request->password, $user->password)) {
-            return RequestHelper::write(402, 'В доступе отказано');
+            if($request->lang == "ru"){
+                return RequestHelper::write(402, 'В доступе отказано');
+            }
+            else if($request->lang == "en"){
+                return RequestHelper::write(402, 'Entrance denied');
+            }
+            
         }
 
         $data = [
@@ -49,7 +55,12 @@ class IndexController extends Controller
         $user = $token->tokenable;
 
         if(!$user){
-            return RequestHelper::write(402, 'В доступе отказано');
+            if($request->lang == "ru"){
+                return RequestHelper::write(402, 'В доступе отказано');
+            }
+            else if($request->lang == "en"){
+                return RequestHelper::write(402, 'Entrance denied');
+            }
         }
         $data = [
             "login" => $user->login,
@@ -155,7 +166,12 @@ class IndexController extends Controller
         ];
         DB::table('friendships')->insert($data);
         $statement = true;
-        return RequestHelper::write(200, 'Вы теперь друзья!', $statement);
+        if($request->lang == "ru"){
+            return RequestHelper::write(200, 'Вы теперь друзья!', $statement);
+        }
+        else if($request->lang == "en"){
+            return RequestHelper::write(200, 'You are friends now!', $statement);
+        }
     }
     function checkFriendshipAction(Request $request){
         $id1 = User::where('login', $request->myLogin)->first();
@@ -198,8 +214,13 @@ class IndexController extends Controller
         }
         DB::table('friendships')->where('id', $id)->delete();
         $statement = false;
-        return RequestHelper::write(200, 'Вы больше не друзья!', $statement);
-  
+        if($request->lang == "ru"){
+            return RequestHelper::write(200, 'Вы больше не друзья', $statement);
+        }
+        else{
+            return RequestHelper::write(200, 'You are not friends anymore!', $statement);
+        }
+        
         
     }
     function updateUserAction(Request $request){

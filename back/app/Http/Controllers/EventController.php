@@ -155,10 +155,13 @@ class EventController extends Controller
             // модераторах, ни в читателях его айдишника нет, то
             // данный ивент даже не запоминается
             
-            $canView = DB::table('event_user')->where([
-            ['user_id', '=', $id2->id],
-            ['event_id', '=', $event->id]
-            ])->first();
+            $canView = DB::table('event_user')
+                ->where([
+                ['user_id', '=', $id2->id],
+                ['event_id', '=', $event->id]])
+                ->orWhere([
+                    ['user_id', '=', 0],
+                    ['event_id', '=', $event->id]])->first();
 
             
             if($request->login == $request->viewer || isset($canView)){

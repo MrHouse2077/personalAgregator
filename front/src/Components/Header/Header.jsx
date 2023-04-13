@@ -12,7 +12,12 @@ import InputBase from '@mui/material/InputBase';
 import Badge from '@mui/material/Badge';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
-import Modal from '../UI/Modal/Modal'
+import Modal from '../UI/Modal/Modal';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
 import Requests from "../Requests";
 import AutoComplete from "../UI/AutoComplete/AutoComplete";
 import {useState} from 'react';
@@ -23,7 +28,26 @@ import { green, purple } from '@mui/material/colors';
 const token = localStorage.getItem('token');
 
 const email = localStorage.getItem('email');
+const languages ={
+  "ru":{
+    "Search": "Поиск..",
+    "lang": "Язык",
+    "profile": "Профиль",
+    "out": "Выйти",
+    "in": "Войти",
+  },
+  "en":{
+    "Search": "Search..",
+    "lang": "Language",
+    "profile": "Profile",
+    "out": "Log out",
+    "in": "Log in",
+  }
+};
 const theme = createTheme({
+  status: {
+    success: green[500],
+  },
   palette: {
     primary: {
       main: purple[500],
@@ -33,6 +57,7 @@ const theme = createTheme({
     },
   },
 });
+
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
@@ -74,6 +99,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function PrimarySearchAppBar(props) {
+  
 
   let [alert, setAlert] = useState({
       msg: null,
@@ -93,7 +119,10 @@ export default function PrimarySearchAppBar(props) {
     copy.open = true;
     setAlert(copy);
   };
-
+  function languageChange(evt){
+    localStorage.setItem('lang', evt.target.value);
+    window.location.reload(false);
+  }
   function sendSearch(log){
     Requests(
       {
@@ -176,21 +205,20 @@ export default function PrimarySearchAppBar(props) {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      
       <Modal alert={alert} handleClose={handleClose}/>
       {(props.login==null)? 
    
         <NavLink to="/" className={Styles.link}>
           <MenuItem onClick={handleMenuClose}>
-            Login 
+          {(localStorage.getItem('lang')=="ru")?languages.ru.in: languages.en.in}
           </MenuItem>
         </NavLink>
       :
       <div>
         <NavLink to={"/user/" + props.login +"/ProfilePage"} className={Styles.link}>
-          <MenuItem onClick={handleMenuClose}>Профиль</MenuItem>
+          <MenuItem onClick={handleMenuClose}>{(localStorage.getItem('lang')=="ru")?languages.ru.profile: languages.en.profile}</MenuItem>
         </NavLink> 
-        <MenuItem onClick={function(evt){handleMenuClose(); loggingOut()}} >Выйти</MenuItem>
+        <MenuItem onClick={function(evt){handleMenuClose(); loggingOut()}} >{(localStorage.getItem('lang')=="ru")?languages.ru.out: languages.en.out}</MenuItem>
       </div>}
       
     </Menu>
@@ -219,7 +247,7 @@ export default function PrimarySearchAppBar(props) {
                 <FontAwesomeIcon icon={solid('magnifying-glass')} />
             </SearchIconWrapper>
             <StyledInputBase
-              placeholder="Поиск..."
+              placeholder={(localStorage.getItem('lang')=="ru")?languages.ru.Search: languages.en.Search}
               aria-controls="searchBar"
               inputProps={{ 'aria-label': 'search' }}
               aria-describedby={id} 
@@ -245,7 +273,18 @@ export default function PrimarySearchAppBar(props) {
               /> 
             </Box>
           </Search>
-            
+          <FormControl>
+            <div id="demo-row-radio-buttons-group-label">{(localStorage.getItem('lang')=="ru")?languages.ru.lang: languages.en.lang}</div>
+            <RadioGroup
+              row
+              aria-labelledby="demo-row-radio-buttons-group-label"
+              name="row-radio-buttons-group"
+              onChange={languageChange}
+            >
+              <FormControlLabel value="en" control={<Radio color="success"/>} color="success" label="English" />
+              <FormControlLabel value="ru" control={<Radio color="success"/>} color="success" label="Русский" />
+            </RadioGroup>
+          </FormControl>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
 
