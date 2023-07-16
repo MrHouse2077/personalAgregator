@@ -18,7 +18,7 @@ import AccountLayout from './Components/layouts/AccountLayout/AccountLayout';
 let def =  {
   auth: 
       {
-          login: null,
+          login: null,  
           email: null,
           token: null 
       }
@@ -35,40 +35,39 @@ function App() {
     copy.auth.email = data.data.email;
     copy.auth.login = data.data.login;
     localStorage.setItem('token', data.data.token);
+    localStorage.setItem('login', data.data.login);
+    localStorage.setItem('email', data.data.email);
+    if(localStorage.getItem("lang"==null)){
+      localStorage.setItem('lang', "ru");
+    }
     setAuth(copy);
-    navigate('/home', {authData: dataApp});
+    navigate('/home');
   }
   function restoreAuthData(data){
-    let copy = Object.assign([], dataApp);
-    copy.auth.token = localStorage.getItem('token');
-    copy.auth.email = data.data.email;
-    copy.auth.login = data.data.login;
-    setAuth(copy);
     let page = localStorage.getItem('page');
-    navigate(page, {authData: dataApp});
+    navigate(page);
   }
   function logout(){
     setAuth(def);
     localStorage.removeItem('token');
     localStorage.removeItem('page');
+    localStorage.removeItem('email');
+    localStorage.removeItem('login');
     navigate('/', {authData: dataApp});
   }
   return (
     <div className="App">
       <Routes>
         <Route path="/" element={<StartPage 
-           authData={dataApp.auth}
            setAuthData={setAuthData}
            restoreData={restoreAuthData}/>} />
         <Route path="/home" element={<Home 
-          authData={dataApp.auth}
           restoreData={restoreAuthData}
           logout={logout}/>} />
         <Route path="/Register" element={<SignUpPage 
-          setAuthData={setAuthData}
-          authData={dataApp.auth}/>} />
+          setAuthData={setAuthData}/>} />
         {/* <Route path="/PassReset" element={<ResetPassPage/>} /> */}
-        <Route path="/user/:log/ProfilePage" element={<AccountLayout authData={dataApp.auth}
+        <Route path="/user/:log/ProfilePage" element={<AccountLayout 
            setAuthData={setAuthData}
            restoreData={restoreAuthData}
            logout={logout}/>}/>

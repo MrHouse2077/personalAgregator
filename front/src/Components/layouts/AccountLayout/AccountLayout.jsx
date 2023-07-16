@@ -27,31 +27,48 @@ import {
   MDBListGroupItem
 } from 'mdb-react-ui-kit';
 import Schedule from "../../UI/Schedule/Schedule";
+const languages ={
+  "ru":{
+    "mainPage": "Главная",
+    "login": "Логин",
+    "name": "Имя",
+    "email": "Электронная почта",
+    "addFriend": "Добавить в друзья!",
+    "deleteFriend": "Убрать из друзей",
 
+  },
+  "en":{
+    "mainPage": "Main page",
+    "login": "Login",
+    "name": "Name",
+    "email": "Email",
+    "addFriend": "Add to friends!",
+    "deleteFriend": "Remove from friends",
+  }
+};
 export default function ProfilePage(props) {
   const { log } = useParams();
   let [userInfo, setInfo] = useState({
-    email: "smt",
-    name: "fs",
+    email: "loading...",
+    name: "loading...",
     privacy: 1,
     login: log,
     img: "default.png",
     flag:true,
   });
   const page = window.location.pathname;
+  let [friendshipData, setFriendship] = useState("loading");
   let [pageData, setPage] = useState(page.substring(1));
   
   const navigate = useNavigate();
   useEffect(() => {     
-    getUser();
+    
     if(!token){
       navigate('/');
     }
-    else if(props.authData.login== null){
-      checkToken();
-    }
     else{
-      
+      getUser();
+      checkFriend();
       localStorage.setItem("page", pageData);
   
     }
@@ -151,16 +168,9 @@ function saveState(data, fieldElement){
     open: false,
 });
   const token = localStorage.getItem('token');
-  function checkToken(){
-    Requests(
-      {
-          method:'post', 
-          url: "/checkToken",
-          data: {token: token, page:window.location.pathname},
-          callback: restore,
-      }
-    )
-  }
+  const login = localStorage.getItem('login');
+  const email = localStorage.getItem('email');
+  
   function restore(data){
     props.restoreData(data)
   }
@@ -171,8 +181,38 @@ function saveState(data, fieldElement){
       {
           method:'post', 
           url: "/getUser",
-          data: {login: log},
+          data: {login: log, token: token},
           callback: renderInfo,
+      }
+    )
+  }
+  function addFriend(){
+    Requests(
+      {
+          method:'post', 
+          url: "/addFriend",
+          data: {myLogin:login, login: log, token: token, lang: localStorage.getItem("lang")},
+          callback: onResponce,
+      }
+    )
+  }
+  function deleteFriend(){
+    Requests(
+      {
+          method:'post', 
+          url: "/deleteFriend",
+          data: {myLogin:login, login: log, token: token},
+          callback: onResponce,
+      }
+    )
+  }
+  function checkFriend(){
+    Requests(
+      {
+          method:'post', 
+          url: "/checkFriend",
+          data: {myLogin:login, login: log, token: token},
+          callback: onCheck,
       }
     )
   }
@@ -181,10 +221,17 @@ function saveState(data, fieldElement){
       {
           method:'post', 
           url: "/updateUser",
-          data: {data: data, login: log},
+          data: {data: data, login: log, token: token},
           callback: onRecieve,
       }
     )
+  }
+  function onResponce(data){
+    setModal({msg:data.msg, open:true});
+    setFriendship(data.data);
+  }
+  function onCheck(data){
+    setFriendship(data.data);
   }
   function renderInfo(data){
     console.log(data);
@@ -193,7 +240,8 @@ function saveState(data, fieldElement){
     copy.name = data.data.name;
     copy.login = log;
     copy.privacy = data.data.privacy;
-    if(log==props.authData.login){
+    
+    if(log==login){
       copy.flag = false;
     }
     setInfo(copy);
@@ -237,7 +285,7 @@ function saveState(data, fieldElement){
             <MDBBreadcrumb className="bg-light rounded-3 p-3 mb-4">
               <MDBBreadcrumbItem>
                 <NavLink to="/home">
-                  <div >Home </div>
+                  <div >{(localStorage.getItem('lang')=="ru")?languages.ru.mainPage: languages.en.mainPage}</div>
                 </NavLink>
               </MDBBreadcrumbItem>
               <MDBBreadcrumbItem active>{log}</MDBBreadcrumbItem>
@@ -257,11 +305,20 @@ function saveState(data, fieldElement){
                   fluid />
                   <MDBRow>
                   
-                  
                 </MDBRow>
               </MDBCardBody>
             </MDBCard>
 
+          {(userInfo.flag!=true)? 
+            null:
+              (friendshipData==false)?
+                <button className={Styles.btn} onClick={addFriend}>  
+                    {(localStorage.getItem('lang')=="ru")?languages.ru.addFriend: languages.en.addFriend}
+                </button>:
+                  <button className={Styles.btn} onClick={deleteFriend}>  
+                  {(localStorage.getItem('lang')=="ru")?languages.ru.deleteFriend: languages.en.deleteFriend}   
+                  </button>
+          }
             
           </MDBCol>
           <MDBCol lg="8">
@@ -276,7 +333,7 @@ function saveState(data, fieldElement){
                   name="login"
                   defaultValue={log}
                   disabled
-                  label="Логин"
+                  label={(localStorage.getItem('lang')=="ru")?languages.ru.login: languages.en.login}
                 />
                   </MDBCol>
                 </MDBRow>
@@ -294,7 +351,7 @@ function saveState(data, fieldElement){
                           required
                           fullWidth  
                           id="firstName"
-                          label="Имя"
+                          label={(localStorage.getItem('lang')=="ru")?languages.ru.name: languages.en.name}
                           autoFocus
                           onChange = {(evt)=>{
                             Validator(
@@ -344,8 +401,7 @@ function saveState(data, fieldElement){
                   required
                   fullWidth
                   id="email"
-                  
-                  label="Email Address"
+                  label={(localStorage.getItem('lang')=="ru")?languages.ru.email: languages.en.email}
                   name="email"
                   key={userInfo.email}
                   defaultValue={userInfo.email}
@@ -394,7 +450,7 @@ function saveState(data, fieldElement){
             </MDBCard>
 
             <Schedule 
-            log={props.authData.login}
+            log={log}
             views={['day']} 
             />
           </MDBCol>

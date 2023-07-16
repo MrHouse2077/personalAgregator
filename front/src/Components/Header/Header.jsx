@@ -5,21 +5,49 @@ import { solid, regular, brands, icon } from '@fortawesome/fontawesome-svg-core/
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
+import Grow from '@mui/material/Grow';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import InputBase from '@mui/material/InputBase';
 import Badge from '@mui/material/Badge';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
-import Modal from '../UI/Modal/Modal'
+import Modal from '../UI/Modal/Modal';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
 import Requests from "../Requests";
+import AutoComplete from "../UI/AutoComplete/AutoComplete";
 import {useState} from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import Styles from './Header.module.scss';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { green, purple } from '@mui/material/colors';
+const token = localStorage.getItem('token');
 
+const email = localStorage.getItem('email');
+const languages ={
+  "ru":{
+    "Search": "Поиск..",
+    "lang": "Язык",
+    "profile": "Профиль",
+    "out": "Выйти",
+    "in": "Войти",
+  },
+  "en":{
+    "Search": "Search..",
+    "lang": "Language",
+    "profile": "Profile",
+    "out": "Log out",
+    "in": "Log in",
+  }
+};
 const theme = createTheme({
+  status: {
+    success: green[500],
+  },
   palette: {
     primary: {
       main: purple[500],
@@ -29,6 +57,7 @@ const theme = createTheme({
     },
   },
 });
+
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
@@ -70,11 +99,15 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function PrimarySearchAppBar(props) {
+  
+
   let [alert, setAlert] = useState({
       msg: null,
       open: false,
   });
 
+  let [search, setSearch] = useState(null);
+  
   function  handleClose(){
     let copy = Object.assign([], alert);
     copy.open = false;
@@ -86,13 +119,16 @@ export default function PrimarySearchAppBar(props) {
     copy.open = true;
     setAlert(copy);
   };
-
+  function languageChange(evt){
+    localStorage.setItem('lang', evt.target.value);
+    window.location.reload(false);
+  }
   function sendSearch(log){
     Requests(
       {
-          method:'post', 
+          method:'post',
           url: "/getSearchResult",
-          data: {login: log},
+          data: {login: log, token: token},
           callback: RenderSearch,
       }
     )
@@ -109,7 +145,17 @@ export default function PrimarySearchAppBar(props) {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+  const [anchorSearch, setAnchorSearch] = React.useState(null);
 
+  const handleSearchClick = (event) => {
+    setAnchorSearch(event.currentTarget);
+  };
+
+  const handleSearchClose = () => {
+    setAnchorSearch(null);
+  };
+  const open = Boolean(anchorSearch);
+  const id = open ? 'popover' : undefined;
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
@@ -129,6 +175,9 @@ export default function PrimarySearchAppBar(props) {
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
+  // function changeSet(value){
+  //   setSearch(value);
+  // }
   function loggingOut(){
       props.logout();
   }
@@ -157,19 +206,19 @@ export default function PrimarySearchAppBar(props) {
       onClose={handleMenuClose}
     >
       <Modal alert={alert} handleClose={handleClose}/>
-      {(props.authData.login==null)? 
+      {(props.login==null)? 
    
         <NavLink to="/" className={Styles.link}>
           <MenuItem onClick={handleMenuClose}>
-            Login 
+          {(localStorage.getItem('lang')=="ru")?languages.ru.in: languages.en.in}
           </MenuItem>
         </NavLink>
       :
       <div>
-        <NavLink to={"/user/" + props.authData.login +"/ProfilePage"} className={Styles.link}>
-          <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+        <NavLink to={"/user/" + props.login +"/ProfilePage"} className={Styles.link}>
+          <MenuItem onClick={handleMenuClose}>{(localStorage.getItem('lang')=="ru")?languages.ru.profile: languages.en.profile}</MenuItem>
         </NavLink> 
-        <MenuItem onClick={function(evt){handleMenuClose(); loggingOut()}} >Logout</MenuItem>
+        <MenuItem onClick={function(evt){handleMenuClose(); loggingOut()}} >{(localStorage.getItem('lang')=="ru")?languages.ru.out: languages.en.out}</MenuItem>
       </div>}
       
     </Menu>
@@ -190,30 +239,56 @@ export default function PrimarySearchAppBar(props) {
             component="div"
             sx={{ display: { xs: 'none', sm: 'block' } }}
           >
-            PA
+            DF
           </Typography>
 
-          <Search onKeyDown={function(evt){searchStart(evt)}}>
+          <Search  onKeyDown={function(evt){searchStart(evt)}}>
             <SearchIconWrapper>
                 <FontAwesomeIcon icon={solid('magnifying-glass')} />
             </SearchIconWrapper>
             <StyledInputBase
-              placeholder="Search…"
+              placeholder={(localStorage.getItem('lang')=="ru")?languages.ru.Search: languages.en.Search}
+              aria-controls="searchBar"
               inputProps={{ 'aria-label': 'search' }}
+              aria-describedby={id} 
+              onClick={handleSearchClick}
+              onChange={(evt)=>{setSearch(evt.target.value)}}
             />
+            <Box>
+              <AutoComplete
+               label ="searchBar" 
+               id={id}
+               open={open}
+               anchorEl={anchorSearch}
+               onClose={handleSearchClose}
+               anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'center',
+              }}
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'center',
+              }}
+              search={search}
+              /> 
+            </Box>
           </Search>
+          <FormControl>
+            <div id="demo-row-radio-buttons-group-label">{(localStorage.getItem('lang')=="ru")?languages.ru.lang: languages.en.lang}</div>
+            <RadioGroup
+              row
+              aria-labelledby="demo-row-radio-buttons-group-label"
+              name="row-radio-buttons-group"
+              onChange={languageChange}
+            >
+              <FormControlLabel value="en" control={<Radio color="success"/>} color="success" label="English" />
+              <FormControlLabel value="ru" control={<Radio color="success"/>} color="success" label="Русский" />
+            </RadioGroup>
+          </FormControl>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
 
-            <IconButton
-              size="large"
-              aria-label="show 17 new notifications"
-              color="inherit"
-            >
-              <Badge badgeContent={0} color="error">
-                <FontAwesomeIcon icon={solid('bell')} />
-              </Badge>
-            </IconButton>
+              
             <IconButton
               size="large"
               edge="end"
@@ -230,6 +305,7 @@ export default function PrimarySearchAppBar(props) {
         </Toolbar>
       </AppBar>
       {renderMenu}
+      
     </Box>
     </ThemeProvider>
   );

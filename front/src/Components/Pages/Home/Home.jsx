@@ -7,16 +7,7 @@ function Home(props) {
   const page = window.location.pathname;
   let [pageData, setPage] = useState(page.substring(1));
   const token = localStorage.getItem('token');
-  function checkToken(){
-    Requests(
-      {
-          method:'post', 
-          url: "/checkToken",
-          data: {token: token, page:window.location.pathname},
-          callback: restore,
-      }
-    )
-  }
+  
   function restore(data){
     props.restoreData(data)
   }
@@ -25,9 +16,6 @@ function Home(props) {
     
     if(!token){
       navigate('/');
-    }
-    else if(props.authData.login== null){
-      checkToken();
     }
     else{
       localStorage.setItem("page", pageData);
@@ -39,9 +27,9 @@ function Home(props) {
        
       <div >
   
-        <MainLayout  authData={props.authData} logout={props.logout}>
+        <MainLayout  logout={props.logout}>
        
-        <Schedule log={props.authData.login} views={['day', 'week']} />
+        <Schedule log={localStorage.getItem("login")}  views={['day', 'week']} />
   
         </MainLayout>
   

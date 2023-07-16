@@ -1,3 +1,20 @@
 .textField{
     margin: 1.5rem 0;
 }
+.btn{
+    margin: 0 auto;
+    background-color: #337ab7; 
+    border-radius: 5%;
+    color: #FFF;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border: none;
+    transition-duration: 0.4s;
+}
+.btn:hover {
+    background-color: #FFF; 
+    color: #337ab7;
+}

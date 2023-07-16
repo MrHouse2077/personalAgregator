@@ -27,7 +27,7 @@ function Copyright() {
     <Typography variant="body2" color="text.secondary" align="center" >
       {'Copyright © '}
       <Link color="inherit" href="https://youtu.be/dQw4w9WgXcQ">
-        PA
+        DayFrame
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -46,7 +46,26 @@ const theme = createTheme({
       },
     },
   });
-
+const languages ={
+    "ru":{
+      "signin": "Вход",
+      "emailMsg": "Введите email",
+      "passMsg": "Введите пароль",
+      "passErr": "Минимальная длинна пароля: 5 символов",
+      "enter": "Войти",
+      "link": "Нет аккаунта? Зарегистрируйтесь!",
+      "popup": "Неправильная почта или пароль",
+    },
+    "en":{
+      "signin": "Sign in",
+      "emailMsg": "Enter email",
+      "passMsg": "Enter password",
+      "passErr": "minimal password length: 5 characters",
+      "enter": "Enter",
+      "link": "No profile yet? Sign up now!",
+      "popup": "Wrong email or password", 
+    }
+};
 export default function StartPage(props){
   const token = localStorage.getItem('token');
   function checkToken(){
@@ -54,7 +73,7 @@ export default function StartPage(props){
       {
           method:'post', 
           url: "/checkToken",
-          data: {token: token},
+          data: {token: token, lang: localStorage.getItem('lang')},
           callback: restore,
       }
     )
@@ -65,8 +84,10 @@ export default function StartPage(props){
   const navigate = useNavigate();
   useEffect(() => {     
     if(token){
-      console.log(1);
-        checkToken();
+      checkToken();
+    }
+    else{
+      
     }
 
     
@@ -85,7 +106,7 @@ export default function StartPage(props){
         rules:[
             {
                 //проверка на email
-                msg: "Введите email",
+                msg: (localStorage.getItem('lang')=="ru")?languages.ru.emailMsg: languages.en.emailMsg,
                 f: function(valueElement){
                     const regexp_email = /^[-a-z0-9!#$%&'*+/=?^_`{|}~]+(?:\.[-a-z0-9!#$%&'*+/=?^_`{|}~]+)*@(?:[a-z0-9]([-a-z0-9]{0,61}[a-z0-9])?\.)*(?:aero|arpa|asia|biz|cat|com|coop|edu|gov|info|int|jobs|mil|mobi|museum|name|net|org|pro|tel|travel|[a-z][a-z])$/iu;
                     return (regexp_email.test(valueElement))? {status: true}: {status: false, msgFaild: this.msg};
@@ -102,7 +123,7 @@ export default function StartPage(props){
             {
                 //проверка на минимальную длинну
                 minLength: 5,
-                msg: "Минимальная длинна пароля: 5 символов",
+                msg: (localStorage.getItem('lang')=="ru")?languages.ru.passErr: languages.en.passErr,
                 f: function(valueElement){
                     return (valueElement.length >= this.minLength)? {status: true}: {status:false, msgFaild: this.msg};
                 }
@@ -124,7 +145,7 @@ export default function StartPage(props){
     };
     function setMsg() {
         let copy = Object.assign([], modal);
-        copy.msg = "Неверная почта или пароль!";
+        copy.msg = (localStorage.getItem('lang')=="ru")?languages.ru.popup: languages.en.popup
         copy.open = true;
         setModal(copy);
       };
@@ -134,7 +155,7 @@ export default function StartPage(props){
             {
                 method:'post', 
                 url: "/login",
-                data: {email: data.email, password: data.password},
+                data: {email: data.email, password: data.password, lang: localStorage.getItem("lang")},
                 callback: onRecieve,
             }
         )
@@ -184,7 +205,7 @@ export default function StartPage(props){
              <FontAwesomeIcon icon={solid('lock')} />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+          {(localStorage.getItem('lang')=="ru")?languages.ru.signin: languages.en.signin}
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
@@ -192,7 +213,7 @@ export default function StartPage(props){
               required
               fullWidth
               id="email"
-              label="Введите email"
+              label={(localStorage.getItem('lang')=="ru")?languages.ru.emailMsg: languages.en.emailMsg}
               name="email"
               autoComplete="email"
               autoFocus
@@ -238,7 +259,7 @@ export default function StartPage(props){
               required
               fullWidth
               name="password"
-              label="Введите пароль"
+              label={(localStorage.getItem('lang')=="ru")?languages.ru.passMsg: languages.en.passMsg}
               type="password"
               id="password"
               autoComplete="current-password"
@@ -298,19 +319,14 @@ export default function StartPage(props){
                 
                 }
             >
-              Войти
+              {(localStorage.getItem('lang')=="ru")?languages.ru.enter: languages.en.enter}
             </Button>
-            <Grid container>
-              <Grid item xs>
-                <NavLink to="/passReset" variant="body2">
-                  Забыли пароль?
-                </NavLink>
-              </Grid>
-              <Grid item>
+            <Grid  container>
+
               <NavLink to="/Register" variant="body2">
-                  Нет аккаунта? Зарегистрируйтесь!
-                </NavLink>
-              </Grid>
+              {(localStorage.getItem('lang')=="ru")?languages.ru.link: languages.en.link}
+              </NavLink>
+              
             </Grid>
           </Box>
         </Box>

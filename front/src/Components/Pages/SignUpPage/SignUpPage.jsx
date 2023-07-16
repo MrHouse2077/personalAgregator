@@ -190,7 +190,7 @@ export default function SignUpPage(props) {
             <FontAwesomeIcon icon={solid('lock')} />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign up
+            Регистрация 
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
@@ -292,7 +292,7 @@ export default function SignUpPage(props) {
                   required
                   fullWidth
                   id="email"
-                  label="Email Address"
+                  label="Электронная почта"
                   name="email"
                   autoComplete="email"
                   onChange = {(evt)=>{
@@ -338,7 +338,7 @@ export default function SignUpPage(props) {
                   required
                   fullWidth
                   name="password"
-                  label="Password"
+                  label="Пароль"
                   type="password"
                   id="password"
                   autoComplete="new-password"

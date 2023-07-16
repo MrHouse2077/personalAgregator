@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
              PrivacySeeder::class,
              RepeatTypeSeeder::class,
              RoleSeeder::class,
+             RightsSeeder::class,
         ]);
     }
 }
